@@ -16,6 +16,18 @@
     {
       "source": "/about",
       "destination": "/about/index.html"
+    },
+    {
+      "source": "/work/orange-rockland",
+      "destination": "/work/orange-rockland/index.html"
+    },
+    {
+      "source": "/work/aca-group",
+      "destination": "/work/aca-group/index.html"
+    },
+    {
+      "source": "/work/national-grid",
+      "destination": "/work/national-grid/index.html"
     }
   ]
 }
