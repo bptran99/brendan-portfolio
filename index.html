@@ -104,6 +104,28 @@
                   <svg aria-hidden="true" viewBox="0 0 20 20"><path d="M10 4v12m-5-5 5 5 5-5" /></svg>
                 </a>
               </div>
+              <section
+                class="spotify-listening"
+                data-spotify-listening
+                aria-label="Spotify listening status"
+                aria-live="polite"
+                aria-busy="true"
+              >
+                <img class="spotify-album" data-spotify-album src="" alt="" hidden />
+                <span class="spotify-status-indicator" data-spotify-indicator aria-hidden="true" hidden>
+                  <span></span><span></span><span></span>
+                </span>
+                <p class="spotify-copy">
+                  <span data-spotify-label>Brendan is listening to:</span>
+                  <span data-spotify-loading> loading…</span>
+                  <a data-spotify-track href="#" target="_blank" rel="noreferrer" hidden>
+                    <strong data-spotify-title></strong>
+                    <span> by </span>
+                    <span data-spotify-artists></span>
+                  </a>
+                  <span data-spotify-empty hidden></span>
+                </p>
+              </section>
             </div>
 
             <figure class="hero-portrait">

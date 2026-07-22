@@ -11,6 +11,82 @@ if (window.location.protocol === 'file:') {
   });
 }
 
+const spotifyListening = document.querySelector('[data-spotify-listening]');
+
+function showSpotifyEmpty(message) {
+  if (!spotifyListening) return;
+
+  spotifyListening.querySelector('[data-spotify-label]').hidden = true;
+  spotifyListening.querySelector('[data-spotify-loading]').hidden = true;
+  spotifyListening.querySelector('[data-spotify-track]').hidden = true;
+  spotifyListening.querySelector('[data-spotify-indicator]').hidden = true;
+  spotifyListening.querySelector('[data-spotify-album]').hidden = true;
+
+  const emptyState = spotifyListening.querySelector('[data-spotify-empty]');
+  emptyState.textContent = message;
+  emptyState.hidden = false;
+  spotifyListening.setAttribute('aria-busy', 'false');
+}
+
+function showSpotifyTrack(track) {
+  if (!spotifyListening) return;
+
+  const label = spotifyListening.querySelector('[data-spotify-label]');
+  const trackLink = spotifyListening.querySelector('[data-spotify-track]');
+  const album = spotifyListening.querySelector('[data-spotify-album]');
+  const indicator = spotifyListening.querySelector('[data-spotify-indicator]');
+
+  label.textContent = track.isPlaying
+    ? 'Brendan is listening to:'
+    : 'Brendan last listened to:';
+  spotifyListening.querySelector('[data-spotify-title]').textContent = track.title;
+  spotifyListening.querySelector('[data-spotify-artists]').textContent = track.artists;
+  spotifyListening.querySelector('[data-spotify-loading]').hidden = true;
+  spotifyListening.querySelector('[data-spotify-empty]').hidden = true;
+
+  trackLink.href = track.spotifyUrl;
+  trackLink.setAttribute('aria-label', `Open ${track.title} by ${track.artists} on Spotify`);
+  trackLink.hidden = false;
+  indicator.hidden = !track.isPlaying;
+
+  if (track.albumArtworkUrl) {
+    album.src = track.albumArtworkUrl;
+    album.alt = `Album artwork for ${track.title} by ${track.artists}`;
+    album.hidden = false;
+  } else {
+    album.hidden = true;
+  }
+
+  spotifyListening.setAttribute('aria-busy', 'false');
+}
+
+async function loadSpotifyOnce() {
+  if (!spotifyListening) return;
+
+  try {
+    const response = await fetch('/api/spotify', {
+      headers: { Accept: 'application/json' },
+    });
+
+    if (!response.ok) throw new Error(`Spotify endpoint returned ${response.status}`);
+
+    const payload = await response.json();
+    if (payload.track) {
+      showSpotifyTrack(payload.track);
+    } else {
+      showSpotifyEmpty('Spotify listening activity is unavailable right now.');
+    }
+  } catch {
+    showSpotifyEmpty('Unable to load Spotify listening activity.');
+  }
+}
+
+spotifyListening?.querySelector('[data-spotify-album]')?.addEventListener('error', (event) => {
+  event.currentTarget.hidden = true;
+}, { once: true });
+
+loadSpotifyOnce();
+
 let vhsPlaybackRate = 1;
 let vhsRateFrame;
 
