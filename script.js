@@ -5,6 +5,12 @@ const hero = document.querySelector('.hero');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const precisePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
 
+if (window.location.protocol === 'file:') {
+  document.querySelectorAll('[data-local-href]').forEach((link) => {
+    link.setAttribute('href', link.dataset.localHref);
+  });
+}
+
 let vhsPlaybackRate = 1;
 let vhsRateFrame;
 
