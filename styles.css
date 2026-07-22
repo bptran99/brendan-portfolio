@@ -92,7 +92,8 @@ svg { width: 20px; fill: none; stroke: currentColor; stroke-linecap: round; stro
 .skip-link:focus { transform: translateY(0); }
 :focus-visible { outline: 3px solid var(--tertiary); outline-offset: 4px; }
 
-.site-header { position: sticky; top: 0; z-index: 100; display: flex; min-height: 88px; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--outline-variant); background: var(--surface); }
+.site-header { position: sticky; top: 0; z-index: 100; display: flex; min-height: 88px; align-items: center; justify-content: space-between; isolation: isolate; }
+.site-header::before { position: absolute; z-index: -1; top: 0; bottom: 0; left: 50%; width: 100vw; border-bottom: 1px solid var(--outline-variant); background: var(--surface); content: ""; transform: translateX(-50%); }
 .desktop-nav { display: flex; gap: 8px; }
 .desktop-nav a { padding: 10px 14px; border-radius: var(--radius); font-family: var(--font-mono); font-size: 13px; text-transform: uppercase; }
 .desktop-nav a:hover { background: var(--surface-container); color: var(--primary); }
