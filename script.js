@@ -5,11 +5,95 @@ const hero = document.querySelector('.hero');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const precisePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
 
+// TypewriterText timing controls.
+const TYPEWRITER_TYPING_INTERVAL = 55;
+const TYPEWRITER_CURSOR_BLINK_INTERVAL = 500;
+const TYPEWRITER_CURSOR_HIDE_DELAY = 1500;
+
 if (window.location.protocol === 'file:') {
   document.querySelectorAll('[data-local-href]').forEach((link) => {
     link.setAttribute('href', link.dataset.localHref);
   });
 }
+
+function initTypewriterText(element) {
+  if (!element || element.dataset.typewriterStarted === 'true') return;
+
+  const output = element.querySelector('[data-typewriter-output]');
+  const cursor = element.querySelector('[data-typewriter-cursor]');
+  const fullText = element.dataset.typewriterText;
+  if (!output || !cursor || !fullText) return;
+
+  let characterIndex = 0;
+  let typingTimer;
+  let cursorTimer;
+  let completionTimer;
+  let observer;
+
+  function clearTimers() {
+    window.clearInterval(typingTimer);
+    window.clearInterval(cursorTimer);
+    window.clearTimeout(completionTimer);
+  }
+
+  function finishImmediately() {
+    clearTimers();
+    output.textContent = fullText;
+    cursor.hidden = true;
+    cursor.classList.remove('is-invisible');
+    observer?.disconnect();
+  }
+
+  function handleReducedMotion(event) {
+    if (event.matches) finishImmediately();
+  }
+
+  function startTyping() {
+    if (element.dataset.typewriterStarted === 'true') return;
+    element.dataset.typewriterStarted = 'true';
+    observer?.disconnect();
+
+    if (reducedMotion.matches) {
+      finishImmediately();
+      return;
+    }
+
+    output.textContent = '';
+    cursor.hidden = false;
+    cursorTimer = window.setInterval(() => {
+      cursor.classList.toggle('is-invisible');
+    }, TYPEWRITER_CURSOR_BLINK_INTERVAL);
+
+    typingTimer = window.setInterval(() => {
+      characterIndex += 1;
+      output.textContent = fullText.slice(0, characterIndex);
+
+      if (characterIndex >= fullText.length) {
+        window.clearInterval(typingTimer);
+        completionTimer = window.setTimeout(() => {
+          window.clearInterval(cursorTimer);
+          cursor.hidden = true;
+          cursor.classList.remove('is-invisible');
+          reducedMotion.removeEventListener('change', handleReducedMotion);
+        }, TYPEWRITER_CURSOR_HIDE_DELAY);
+      }
+    }, TYPEWRITER_TYPING_INTERVAL);
+  }
+
+  reducedMotion.addEventListener('change', handleReducedMotion);
+  window.addEventListener('pagehide', clearTimers, { once: true });
+
+  if ('IntersectionObserver' in window) {
+    observer = new IntersectionObserver((entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) startTyping();
+    }, { threshold: 0.15 });
+    observer.observe(element);
+  } else {
+    startTyping();
+  }
+}
+
+initTypewriterText(document.querySelector('[data-typewriter-text]'));
 
 const spotifyListening = document.querySelector('[data-spotify-listening]');
 
