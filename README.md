@@ -25,41 +25,36 @@ The Spotify integration uses the Authorization Code flow for Brendan's account o
    http://127.0.0.1:8888/callback
    ```
 
-   Spotify requires HTTPS except for explicit loopback IP addresses. Do not substitute `localhost`.
+   Spotify permits HTTP only for explicit loopback IP addresses and does not allow `localhost`. The authorization request and token exchange must use this exact same value.
 3. Copy the app's Client ID and Client Secret.
 
-### 2. Authorize the account
+### 2. Add local setup credentials
 
-Open the following URL after replacing `YOUR_CLIENT_ID`. The two scopes allow the server to read the active track and the most recently played track:
+Create an uncommitted `.env.local` file containing:
 
-```text
-https://accounts.spotify.com/authorize?client_id=YOUR_CLIENT_ID&response_type=code&redirect_uri=http%3A%2F%2F127.0.0.1%3A8888%2Fcallback&scope=user-read-currently-playing%20user-read-recently-played
+```dotenv
+SPOTIFY_CLIENT_ID=your-client-id
+SPOTIFY_CLIENT_SECRET=your-client-secret
+SPOTIFY_REFRESH_TOKEN=
 ```
 
-Approve the app. The loopback page does not need to load successfully; copy the `code` value from the redirected browser URL. The code is short-lived and can be used only once.
+The file is ignored by Git.
 
-### 3. Exchange the code for a refresh token
+### 3. Authenticate Brendan's Spotify account
 
-Set temporary shell variables, then exchange the code. The `redirect_uri` must exactly match the one used above.
+Run the local authorization helper from the portfolio directory:
 
 ```bash
-export SPOTIFY_CLIENT_ID="your-client-id"
-export SPOTIFY_CLIENT_SECRET="your-client-secret"
-export SPOTIFY_REDIRECT_URI="http://127.0.0.1:8888/callback"
-
-curl -X POST "https://accounts.spotify.com/api/token" \
-  -H "Authorization: Basic $(printf '%s:%s' "$SPOTIFY_CLIENT_ID" "$SPOTIFY_CLIENT_SECRET" | base64)" \
-  -H "Content-Type: application/x-www-form-urlencoded" \
-  --data-urlencode "grant_type=authorization_code" \
-  --data-urlencode "code=PASTE_THE_CODE_HERE" \
-  --data-urlencode "redirect_uri=$SPOTIFY_REDIRECT_URI"
+node scripts/spotify-auth.mjs
 ```
 
-Copy the `refresh_token` from the JSON response. Spotify refresh tokens issued through the Developer Dashboard currently expire after six months, so repeat the authorization process when needed.
+Open the authorization URL printed in the terminal, sign in to Brendan's Spotify account, and approve the two read-only scopes. Spotify returns to the local helper, which verifies the OAuth state and exchanges the authorization code server-side. The browser receives only a success or error message; the refresh token is printed only in the terminal.
+
+Spotify refresh tokens issued through the Developer Dashboard currently expire after six months, so repeat this flow when needed.
 
 ### 4. Add environment variables
 
-Create an uncommitted `.env.local` file in the project root for local development:
+Update the same uncommitted `.env.local` file with the refresh token printed by the helper:
 
 ```dotenv
 SPOTIFY_CLIENT_ID=your-client-id
@@ -79,7 +74,8 @@ Redeploy after adding or changing variables. Existing deployments do not receive
 
 ### Security and caching
 
-- The client secret and refresh token are read only inside `api/spotify.js` and are never returned to the browser.
+- The client secret and refresh token are read only by server-side code and are never returned to the browser.
+- The local OAuth helper verifies a cryptographically random state value, exchanges the authorization code server-side, and prints the refresh token only in the local terminal.
 - The endpoint returns only the track title, artist names, album artwork URL, Spotify URL, and playback state.
 - The endpoint keeps a short in-memory cache and sends short shared-cache headers so visitors arriving close together do not create redundant Spotify requests.
 - Missing credentials, expired authorization, and Spotify outages return a safe empty state.

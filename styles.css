@@ -208,7 +208,19 @@ h2, h3 { margin: 0; font-family: var(--font-display); }
 .project-year { font-family: var(--font-mono); font-size: 12px; font-weight: 700; }
 .project-tags { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 5px; margin: 0; padding: 0; list-style: none; }
 .project-tags li { padding: 3px 6px; border-radius: 0; background: var(--tag-surface); color: var(--tag-text); font-family: var(--font-body); font-size: 11px; font-weight: 600; line-height: 1.2; text-transform: none; }
-.site-footer { display: grid; grid-template-columns: 1fr 1fr; padding-top: 22px; padding-bottom: 28px; border-top: 1px solid var(--outline-variant); color: var(--outline); font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; }.site-footer p { margin: 0; }.site-footer div { text-align: right; }.site-footer a:hover { color: var(--primary); }
+.admin-page { min-height: calc(100vh - 168px); padding-top: clamp(72px, 9vw, 136px); padding-bottom: clamp(96px, 12vw, 176px); }
+.admin-panel { max-width: 720px; }
+.admin-panel h1 { margin: 12px 0 0; font-family: var(--font-display); font-size: clamp(64px, 10vw, 128px); font-weight: 700; letter-spacing: -.05em; line-height: .88; text-transform: uppercase; }
+.admin-intro { max-width: 640px; margin: 32px 0 0; color: var(--on-surface-variant); font-size: 18px; line-height: 30px; }
+.admin-steps { display: grid; gap: 0; margin: 48px 0 32px; padding: 0; border-top: 2px solid var(--on-surface); list-style: none; counter-reset: admin-step; }
+.admin-steps li { position: relative; padding: 28px 0 28px 52px; border-bottom: 1px solid var(--outline-variant); counter-increment: admin-step; }
+.admin-steps li::before { position: absolute; top: 30px; left: 0; content: counter(admin-step, decimal-leading-zero); font-family: var(--font-mono); font-size: 12px; }
+.admin-steps strong { font-family: var(--font-display); font-size: 28px; line-height: 1; }
+.admin-steps p { margin: 10px 0 0; color: var(--on-surface-variant); line-height: 26px; }
+.admin-steps code, .admin-command { font-family: var(--font-mono); font-size: .88em; }
+.admin-command { display: block; margin-top: 14px; padding: 14px; overflow-x: auto; background: var(--surface-container); color: var(--on-surface); white-space: nowrap; }
+.admin-note { margin: 0; color: var(--on-surface-variant); font-size: 14px; line-height: 22px; }
+.site-footer { display: grid; grid-template-columns: 1fr 1fr; padding-top: 22px; padding-bottom: 28px; border-top: 1px solid var(--outline-variant); color: var(--outline); font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; }.site-footer p { margin: 0; }.footer-nav { display: flex; justify-content: flex-end; gap: 24px; }.site-footer a:hover { color: var(--primary); }
 
 @media (max-width: 900px) {
   :root { --margin: 32px; --gutter: 20px; }
@@ -243,9 +255,11 @@ h2, h3 { margin: 0; font-family: var(--font-display); }
   .about-sections { margin-top: 64px; }
   .about-section { padding-block: 48px; }
   .about-section-copy p { font-size: 16px; line-height: 1.65; }
+  .admin-page { min-height: calc(100vh - 152px); padding-top: 64px; padding-bottom: 96px; }
+  .admin-steps li { padding-left: 42px; }
   .section-heading { margin-bottom: 28px; }.section-heading h2 { font-size: 52px; }
   .project-list { grid-template-columns: 1fr; gap: 32px; }.project-visual { min-height: 360px; }.project-info { padding: 14px 8px 0; }.project-info h3 { font-size: 38px; }
-  .site-footer { grid-template-columns: 1fr auto; gap: 12px; }
+  .site-footer { grid-template-columns: 1fr auto; gap: 12px; }.footer-nav { gap: 14px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

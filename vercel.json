@@ -16,6 +16,10 @@
     {
       "source": "/about",
       "destination": "/about/index.html"
+    },
+    {
+      "source": "/admin",
+      "destination": "/admin/index.html"
     }
   ]
 }

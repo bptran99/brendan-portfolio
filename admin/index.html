@@ -3,10 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="About Brendan Tran, a Senior Product Designer focused on clear, useful, and thoughtful digital experiences."
-    />
+    <meta name="robots" content="noindex, nofollow" />
     <title>Brendan Tran</title>
     <link rel="icon" href="../assets/favicon.png" type="image/png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -35,20 +32,14 @@
     <header class="site-header shell">
       <nav class="desktop-nav" aria-label="Primary navigation">
         <a href="/home#work" data-local-href="../index.html#work">Work</a>
-        <a href="/about" data-local-href="index.html" aria-current="page">About</a>
+        <a href="/about" data-local-href="../about/index.html">About</a>
         <a href="mailto:bptran99@gmail.com">Contact</a>
       </nav>
 
       <a class="nav-name" href="/home#top" data-local-href="../index.html#top" aria-label="Brendan Tran, home">Brendan Tran</a>
 
       <div class="header-actions">
-        <button
-          class="theme-toggle"
-          type="button"
-          aria-label="Switch to dark mode"
-          aria-pressed="false"
-          title="Switch to dark mode"
-        >
+        <button class="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false" title="Switch to dark mode">
           <svg class="theme-icon theme-icon-sun" aria-hidden="true" viewBox="0 0 24 24">
             <circle cx="12" cy="12" r="3.5" />
             <path d="M12 2.5v2M12 19.5v2M4.5 12h-2M21.5 12h-2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M18.7 5.3l-1.4 1.4M6.7 17.3l-1.4 1.4" />
@@ -57,13 +48,7 @@
             <path d="M20 15.1A8 8 0 0 1 8.9 4a8.25 8.25 0 1 0 11.1 11.1Z" />
           </svg>
         </button>
-        <a
-          class="linkedin-link"
-          href="https://linkedin.com/in/brendanptran"
-          target="_blank"
-          rel="noreferrer"
-          aria-label="Brendan Tran on LinkedIn"
-        >
+        <a class="linkedin-link" href="https://linkedin.com/in/brendanptran" target="_blank" rel="noreferrer" aria-label="Brendan Tran on LinkedIn">
           <svg class="linkedin-icon" aria-hidden="true" viewBox="0 0 24 24">
             <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45Z" />
           </svg>
@@ -75,43 +60,46 @@
 
       <nav class="mobile-nav" id="mobile-menu" aria-label="Mobile navigation" hidden>
         <a href="/home#work" data-local-href="../index.html#work">Work <span>01</span></a>
-        <a href="/about" data-local-href="index.html" aria-current="page">About <span>02</span></a>
+        <a href="/about" data-local-href="../about/index.html">About <span>02</span></a>
         <a href="mailto:bptran99@gmail.com">Contact <span>03</span></a>
         <a href="https://linkedin.com/in/brendanptran" target="_blank" rel="noreferrer">LinkedIn <span>04 ↗</span></a>
       </nav>
     </header>
 
-    <main class="about-page shell" id="main">
-      <header class="about-header">
-        <p class="eyebrow">About / Brendan Tran</p>
-        <h1>About</h1>
-      </header>
+    <main class="admin-page shell" id="main">
+      <div class="admin-panel">
+        <p class="eyebrow">Admin / Spotify setup</p>
+        <h1>Admin</h1>
+        <p class="admin-intro">Authenticate Brendan’s Spotify account without exposing the client secret or refresh token to this page. The one-time authorization runs locally and returns the refresh token only in your terminal.</p>
 
-      <div class="about-sections">
-        <section class="about-section" aria-labelledby="bio-title">
-          <h2 id="bio-title">Bio</h2>
-          <div class="about-section-copy">
-            <p>Based in Brooklyn, I spend most of my free time hanging out with friends, finding cafés to settle into, going to concerts, or jamming in a band with friends.</p>
-            <p>A lot of what shapes my perspective comes from drawing inspiration across different creative mediums and everyday experiences, whether that’s through music, physical spaces, traveling, objects, or the small details that give places and experiences their character.</p>
-          </div>
-        </section>
+        <ol class="admin-steps">
+          <li>
+            <strong>Configure Spotify</strong>
+            <p>Register <code>http://127.0.0.1:8888/callback</code> as the redirect URI in the Spotify Developer Dashboard.</p>
+          </li>
+          <li>
+            <strong>Add local credentials</strong>
+            <p>Put <code>SPOTIFY_CLIENT_ID</code> and <code>SPOTIFY_CLIENT_SECRET</code> in the project’s uncommitted <code>.env.local</code> file.</p>
+          </li>
+          <li>
+            <strong>Authenticate locally</strong>
+            <p>From the portfolio directory, run:</p>
+            <code class="admin-command">node scripts/spotify-auth.mjs</code>
+          </li>
+          <li>
+            <strong>Finish in Vercel</strong>
+            <p>Copy the refresh token printed in the terminal into Vercel as <code>SPOTIFY_REFRESH_TOKEN</code>, then redeploy.</p>
+          </li>
+        </ol>
 
-        <section class="about-section" aria-labelledby="experience-title">
-          <h2 id="experience-title">Experience</h2>
-          <div class="about-section-copy">
-            <p>I’ve spent the past four years at West Monroe working across enterprise products and internal tools, helping teams make sense of complex workflows and turn early ideas into tangible product direction.</p>
-            <p>A big part of my role has been leading design sprints, facilitating workshops, and helping cross-functional teams align around product strategy before moving into execution. My work often sits between ambiguity and implementation, whether that’s shaping an initial concept, mapping out a user flow, prototyping ideas, or working closely with engineers to refine the experience as it gets built.</p>
-            <p>More recently, I’ve been exploring ways to incorporate agentic design into my process, using AI as a collaborative tool for research synthesis, ideation, rapid prototyping, and exploring new ways of thinking through product experiences.</p>
-            <p>I enjoy the collaborative side of product design just as much as the craft itself, especially the process of bringing different perspectives together and creating clarity around what a product should be and how it should feel to use.</p>
-          </div>
-        </section>
+        <p class="admin-note">This public page contains instructions only. It never receives or stores Spotify credentials.</p>
       </div>
     </main>
 
     <footer class="site-footer shell">
       <p>© <span id="year">2026</span> Brendan Tran</p>
       <nav class="footer-nav" aria-label="Footer navigation">
-        <a href="/admin" data-local-href="../admin/index.html">Admin</a>
+        <a href="/admin" data-local-href="index.html" aria-current="page">Admin</a>
         <a href="#main">Back to top ↑</a>
       </nav>
     </footer>
