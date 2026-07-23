@@ -219,7 +219,8 @@ h2, h3 { margin: 0; font-family: var(--font-display); }
 .project-link:hover .project-visual { background: var(--surface-container); }
 .project-link:hover h3 { color: var(--primary); }
 .project-visual { position: relative; display: grid; width: 100%; aspect-ratio: 1; place-items: center; overflow: hidden; }
-.project-visual img { width: 100%; height: 100%; object-fit: cover; }
+.project-visual img { width: 100%; height: 100%; object-fit: cover; transition: filter .18s; }
+.project-link:hover .project-visual img { filter: brightness(.7); }
 .project-placeholder { background: var(--surface-high); }
 .project-info { display: flex; flex: 1; flex-direction: column; padding: 14px 8px 0; }
 .project-meta { color: var(--on-surface); font-family: var(--font-body); font-size: 14px; font-weight: 600; letter-spacing: 0; text-transform: none; }
