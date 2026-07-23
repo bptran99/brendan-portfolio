@@ -141,7 +141,7 @@ h2, h3 { margin: 0; font-family: var(--font-display); }
 .hero .button-secondary:hover { background: var(--hero-secondary); color: var(--hero-on-secondary); }
 .hero .button-primary:hover { border-color: var(--hero-on-surface); background: var(--hero-on-surface); color: var(--hero-surface); }
 .spotify-listening { display: flex; max-width: 560px; min-height: 48px; align-items: center; gap: 12px; margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--hero-on-surface-variant); color: var(--hero-on-surface-variant); }
-.spotify-album { width: 42px; height: 42px; flex: 0 0 42px; border-radius: var(--radius-sm); filter: grayscale(1); object-fit: cover; }
+.spotify-album { width: 42px; height: 42px; flex: 0 0 42px; border-radius: var(--radius-sm); object-fit: cover; }
 .spotify-status-indicator { display: inline-flex; width: 18px; height: 18px; flex: 0 0 18px; align-items: flex-end; justify-content: center; gap: 2px; color: var(--hero-on-surface); }
 .spotify-status-indicator span { width: 3px; height: 100%; background: currentColor; animation: spotify-level .8s ease-in-out infinite alternate; transform: scaleY(.35); transform-origin: bottom; }
 .spotify-status-indicator span:nth-child(2) { animation-delay: -.45s; }
