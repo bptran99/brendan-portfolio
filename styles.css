@@ -126,9 +126,15 @@ svg { width: 20px; fill: none; stroke: currentColor; stroke-linecap: round; stro
 .typewriter-frame { position: relative; display: block; }
 .typewriter-measure { visibility: hidden; }
 .typewriter-live { position: absolute; inset: 0; }
-.typewriter-cursor { display: inline; }
+.typewriter-word { white-space: nowrap; }
+.typewriter-glyph { position: relative; display: inline-block; color: transparent; }
+.typewriter-glyph::before { position: absolute; left: 0; color: var(--hero-on-surface); content: attr(data-glitch); }
+.typewriter-glyph.is-offset { transform: translateX(var(--glitch-offset)); }
+.typewriter-glyph.has-block::after { position: absolute; top: .48em; left: -.08em; width: .72em; height: .1em; background: var(--primary); content: ""; pointer-events: none; }
+.typewriter-cursor { display: inline; opacity: 1; transition: opacity 160ms ease; }
 .typewriter-cursor[hidden] { display: none; }
 .typewriter-cursor.is-invisible { visibility: hidden; }
+.typewriter-cursor.is-fading { opacity: 0; }
 h2, h3 { margin: 0; font-family: var(--font-display); }
 .hero-intro { max-width: 680px; margin: 24px 0 0; color: var(--hero-on-surface-variant); font-size: 18px; line-height: 28px; }
 .hero-actions { display: flex; gap: 12px; margin-top: 32px; }

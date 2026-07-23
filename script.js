@@ -5,10 +5,15 @@ const hero = document.querySelector('.hero');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const precisePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
 
-// TypewriterText timing controls.
-const TYPEWRITER_TYPING_INTERVAL = 55;
-const TYPEWRITER_CURSOR_BLINK_INTERVAL = 500;
-const TYPEWRITER_CURSOR_HIDE_DELAY = 1500;
+// GlitchTypewriterText timing controls.
+const TYPING_INTERVAL = 50;
+const GLITCH_COUNT = 4;
+const GLITCH_MIN_DURATION = 40;
+const GLITCH_MAX_DURATION = 80;
+const CURSOR_BLINK_INTERVAL = 500;
+const CURSOR_HOLD_AFTER_COMPLETE = 1000;
+const CURSOR_FADE_DURATION = 160;
+const GLITCH_GLYPHS = '#%&@?*/+=<>[]{}01';
 
 if (window.location.protocol === 'file:') {
   document.querySelectorAll('[data-local-href]').forEach((link) => {
@@ -27,25 +32,166 @@ function initTypewriterText(element) {
   let characterIndex = 0;
   let typingTimer;
   let cursorTimer;
-  let completionTimer;
+  let glitchTimer;
+  let cursorHoldTimer;
+  let cursorFadeTimer;
   let observer;
+  const glitchTriggers = createGlitchTriggers(fullText.length);
+  const usedGlitchTriggers = new Set();
 
   function clearTimers() {
-    window.clearInterval(typingTimer);
+    window.clearTimeout(typingTimer);
     window.clearInterval(cursorTimer);
-    window.clearTimeout(completionTimer);
+    window.clearTimeout(glitchTimer);
+    window.clearTimeout(cursorHoldTimer);
+    window.clearTimeout(cursorFadeTimer);
+  }
+
+  function createGlitchTriggers(textLength) {
+    const minimumIndex = Math.min(18, Math.max(2, textLength - GLITCH_COUNT));
+    const maximumIndex = Math.max(minimumIndex, textLength - 5);
+    const triggers = [];
+    let attempts = 0;
+
+    while (triggers.length < GLITCH_COUNT && attempts < 100) {
+      const candidate = Math.floor(
+        minimumIndex + Math.random() * (maximumIndex - minimumIndex + 1),
+      );
+
+      if (triggers.every((trigger) => Math.abs(trigger - candidate) >= 6)) {
+        triggers.push(candidate);
+      }
+      attempts += 1;
+    }
+
+    while (triggers.length < GLITCH_COUNT) {
+      const fallback = Math.round(
+        minimumIndex
+          + ((maximumIndex - minimumIndex) * (triggers.length + 1)) / (GLITCH_COUNT + 1),
+      );
+      if (!triggers.includes(fallback)) triggers.push(fallback);
+      else triggers.push(Math.min(maximumIndex, fallback + triggers.length));
+    }
+
+    return triggers.sort((a, b) => a - b);
+  }
+
+  function randomInteger(minimum, maximum) {
+    return Math.floor(minimum + Math.random() * (maximum - minimum + 1));
+  }
+
+  function shuffled(values) {
+    return [...values].sort(() => Math.random() - 0.5);
+  }
+
+  function renderGlitch(visibleText) {
+    const eligibleIndices = [...visibleText]
+      .map((character, index) => ({ character, index }))
+      .filter(({ character }) => !/\s/.test(character))
+      .map(({ index }) => index);
+    const maximumCorruption = Math.min(5, Math.max(2, Math.floor(eligibleIndices.length * 0.12)));
+    const corruptionCount = randomInteger(2, maximumCorruption);
+    const start = randomInteger(0, Math.max(0, eligibleIndices.length - corruptionCount));
+    const corruptIndices = eligibleIndices.slice(start, start + corruptionCount);
+    const offsetIndices = new Set(shuffled(corruptIndices).slice(0, Math.min(2, corruptIndices.length)));
+    const blockIndices = new Set(shuffled(corruptIndices).slice(0, randomInteger(1, Math.min(2, corruptIndices.length))));
+    const corruptIndexSet = new Set(corruptIndices);
+    const fragment = document.createDocumentFragment();
+    let sourceIndex = 0;
+
+    visibleText.split(/(\s+)/).forEach((segment) => {
+      if (!segment) return;
+      if (/^\s+$/.test(segment)) {
+        fragment.append(document.createTextNode(segment));
+        sourceIndex += segment.length;
+        return;
+      }
+
+      const word = document.createElement('span');
+      word.className = 'typewriter-word';
+
+      [...segment].forEach((character) => {
+        if (!corruptIndexSet.has(sourceIndex)) {
+          word.append(document.createTextNode(character));
+          sourceIndex += 1;
+          return;
+        }
+
+        const glyph = document.createElement('span');
+        glyph.className = 'typewriter-glyph';
+        glyph.textContent = character;
+        glyph.dataset.glitch = GLITCH_GLYPHS[randomInteger(0, GLITCH_GLYPHS.length - 1)];
+
+        if (offsetIndices.has(sourceIndex)) {
+          const direction = Math.random() < 0.5 ? -1 : 1;
+          glyph.classList.add('is-offset');
+          glyph.style.setProperty('--glitch-offset', `${direction * randomInteger(1, 3)}px`);
+        }
+        if (blockIndices.has(sourceIndex)) glyph.classList.add('has-block');
+
+        word.append(glyph);
+        sourceIndex += 1;
+      });
+
+      fragment.append(word);
+    });
+
+    output.replaceChildren(fragment);
   }
 
   function finishImmediately() {
     clearTimers();
     output.textContent = fullText;
     cursor.hidden = true;
-    cursor.classList.remove('is-invisible');
+    cursor.classList.remove('is-invisible', 'is-fading');
     observer?.disconnect();
+    reducedMotion.removeEventListener('change', handleReducedMotion);
   }
 
   function handleReducedMotion(event) {
     if (event.matches) finishImmediately();
+  }
+
+  function finishTyping() {
+    cursorHoldTimer = window.setTimeout(() => {
+      window.clearInterval(cursorTimer);
+      cursor.classList.remove('is-invisible');
+      cursor.classList.add('is-fading');
+
+      cursorFadeTimer = window.setTimeout(() => {
+        cursor.hidden = true;
+        cursor.classList.remove('is-fading');
+        reducedMotion.removeEventListener('change', handleReducedMotion);
+      }, CURSOR_FADE_DURATION);
+    }, CURSOR_HOLD_AFTER_COMPLETE);
+  }
+
+  function typeNextCharacter() {
+    characterIndex += 1;
+    const visibleText = fullText.slice(0, characterIndex);
+    output.textContent = visibleText;
+
+    const glitchTrigger = glitchTriggers.find(
+      (trigger) => trigger <= characterIndex && !usedGlitchTriggers.has(trigger),
+    );
+
+    if (glitchTrigger) {
+      usedGlitchTriggers.add(glitchTrigger);
+      renderGlitch(visibleText);
+      glitchTimer = window.setTimeout(() => {
+        output.textContent = visibleText;
+        if (characterIndex >= fullText.length) finishTyping();
+        else typingTimer = window.setTimeout(typeNextCharacter, TYPING_INTERVAL);
+      }, randomInteger(GLITCH_MIN_DURATION, GLITCH_MAX_DURATION));
+      return;
+    }
+
+    if (characterIndex >= fullText.length) {
+      finishTyping();
+      return;
+    }
+
+    typingTimer = window.setTimeout(typeNextCharacter, TYPING_INTERVAL);
   }
 
   function startTyping() {
@@ -60,24 +206,12 @@ function initTypewriterText(element) {
 
     output.textContent = '';
     cursor.hidden = false;
+    cursor.classList.remove('is-invisible', 'is-fading');
     cursorTimer = window.setInterval(() => {
       cursor.classList.toggle('is-invisible');
-    }, TYPEWRITER_CURSOR_BLINK_INTERVAL);
+    }, CURSOR_BLINK_INTERVAL);
 
-    typingTimer = window.setInterval(() => {
-      characterIndex += 1;
-      output.textContent = fullText.slice(0, characterIndex);
-
-      if (characterIndex >= fullText.length) {
-        window.clearInterval(typingTimer);
-        completionTimer = window.setTimeout(() => {
-          window.clearInterval(cursorTimer);
-          cursor.hidden = true;
-          cursor.classList.remove('is-invisible');
-          reducedMotion.removeEventListener('change', handleReducedMotion);
-        }, TYPEWRITER_CURSOR_HIDE_DELAY);
-      }
-    }, TYPEWRITER_TYPING_INTERVAL);
+    typingTimer = window.setTimeout(typeNextCharacter, TYPING_INTERVAL);
   }
 
   reducedMotion.addEventListener('change', handleReducedMotion);
