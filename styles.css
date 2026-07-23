@@ -127,6 +127,7 @@ svg { width: 20px; fill: none; stroke: currentColor; stroke-linecap: round; stro
 .typewriter-measure { visibility: hidden; }
 .typewriter-live { position: absolute; inset: 0; }
 .typewriter-cursor { display: inline; }
+.typewriter-cursor[hidden] { display: none; }
 .typewriter-cursor.is-invisible { visibility: hidden; }
 h2, h3 { margin: 0; font-family: var(--font-display); }
 .hero-intro { max-width: 680px; margin: 24px 0 0; color: var(--hero-on-surface-variant); font-size: 18px; line-height: 28px; }
