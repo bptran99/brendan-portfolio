@@ -28,6 +28,10 @@
     {
       "source": "/work/national-grid",
       "destination": "/work/national-grid/index.html"
+    },
+    {
+      "source": "/work/delta-dental-california",
+      "destination": "/work/delta-dental-california/index.html"
     }
   ]
 }
