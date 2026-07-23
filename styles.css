@@ -248,10 +248,7 @@ h2, h3 { margin: 0; font-family: var(--font-display); }
 .case-study-gate-brand { position: absolute; z-index: 3; top: clamp(24px, 4vw, 48px); left: clamp(24px, 5vw, 72px); font-family: var(--font-display); font-size: 22px; font-weight: 700; letter-spacing: -.02em; text-transform: uppercase; }
 .case-study-gate-brand:hover { color: var(--hero-secondary); }
 .case-study-gate-panel { position: relative; z-index: 3; width: min(100%, 560px); }
-.case-study-gate-panel .eyebrow { color: var(--hero-on-surface-variant); }
-.case-study-gate-panel h1 { margin: 14px 0 0; font-family: var(--font-display); font-size: clamp(52px, 8vw, 96px); font-weight: 700; letter-spacing: -.045em; line-height: .9; text-transform: uppercase; }
-.case-study-gate-intro { max-width: 520px; margin: 24px 0 0; color: var(--hero-on-surface-variant); font-size: 17px; line-height: 1.6; }
-.case-study-gate-form { display: grid; gap: 16px; margin-top: 36px; }
+.case-study-gate-form { display: grid; gap: 16px; }
 .case-study-gate-label { font-family: var(--font-mono); font-size: 12px; letter-spacing: .04em; text-transform: uppercase; }
 .case-study-gate-input { width: 100%; min-height: 56px; padding: 0 16px; border: 2px solid var(--hero-on-surface); border-radius: var(--radius); outline: none; background: transparent; color: var(--hero-on-surface); font: inherit; }
 .case-study-gate-input:focus-visible { border-color: var(--hero-secondary); outline: 3px solid var(--hero-secondary); outline-offset: 3px; }
