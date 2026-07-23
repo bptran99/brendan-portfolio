@@ -213,7 +213,7 @@ h2, h3 { margin: 0; font-family: var(--font-display); }
 .project-link { display: flex; height: 100%; flex-direction: column; cursor: pointer; }
 .project-featured { grid-column: 1 / -1; }
 .project-featured .project-link { display: grid; grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr); }
-.project-featured .project-visual { min-height: clamp(360px, 32vw, 480px); aspect-ratio: auto; }
+.project-featured .project-visual { min-height: clamp(432px, 38.4vw, 576px); aspect-ratio: auto; }
 .project-featured .project-info { justify-content: flex-end; padding: clamp(28px, 4vw, 56px) clamp(28px, 4vw, 56px) 0; }
 .project-link .project-visual, .project-link h3 { transition: background-color .18s, color .18s; }
 .project-link:hover .project-visual { background: var(--surface-container); }
