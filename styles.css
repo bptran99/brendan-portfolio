@@ -129,7 +129,7 @@ svg { width: 20px; fill: none; stroke: currentColor; stroke-linecap: round; stro
 .typewriter-word { display: inline-block; vertical-align: baseline; white-space: nowrap; }
 .typewriter-glyph { position: relative; display: inline-block; vertical-align: baseline; }
 .typewriter-glyph.is-dimmed { opacity: .35; }
-.typewriter-glyph.has-block::after { position: absolute; top: .48em; left: -.08em; width: 2.2em; height: .12em; background: var(--primary); content: ""; pointer-events: none; }
+.typewriter-glyph.has-block::after { position: absolute; z-index: 1; top: calc((100% - var(--block-height)) / 2); left: -.08em; width: var(--block-width); height: var(--block-height); border-radius: 1px; background: var(--primary); content: ""; opacity: var(--block-opacity); pointer-events: none; }
 .typewriter-cursor { display: inline; opacity: 1; transition: opacity 160ms ease; }
 .typewriter-cursor[hidden] { display: none; }
 .typewriter-cursor.is-invisible { visibility: hidden; }

@@ -7,11 +7,16 @@ const precisePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
 
 // FlickerTypewriterText timing controls.
 const TYPING_INTERVAL = 50;
-const FLICKER_COUNT = 4;
-const FLICKER_MIN_DURATION = 40;
-const FLICKER_MAX_DURATION = 80;
-const BLOCK_MIN_DURATION = 40;
-const BLOCK_MAX_DURATION = 70;
+const FLICKER_COUNT = 6;
+const FLICKER_MIN_DURATION = 60;
+const FLICKER_MAX_DURATION = 120;
+const BLOCK_MIN_DURATION = 60;
+const BLOCK_MAX_DURATION = 100;
+const BLOCK_MIN_WIDTH = 3;
+const BLOCK_MAX_WIDTH = 8;
+const BLOCK_MIN_HEIGHT = 70;
+const BLOCK_MAX_HEIGHT = 90;
+const BLOCK_OPACITY = 0.88;
 const CURSOR_BLINK_INTERVAL = 500;
 const CURSOR_HOLD_AFTER_COMPLETE = 1000;
 const CURSOR_FADE_DURATION = 160;
@@ -56,46 +61,48 @@ function initTypewriterText(element) {
     const minimumIndex = Math.min(18, Math.max(2, textLength - FLICKER_COUNT));
     const maximumIndex = Math.max(minimumIndex, textLength - 5);
     const triggers = [];
-    let attempts = 0;
 
-    while (triggers.length < FLICKER_COUNT && attempts < 100) {
-      const candidate = Math.floor(
-        minimumIndex + Math.random() * (maximumIndex - minimumIndex + 1),
+    for (let index = 0; index < FLICKER_COUNT; index += 1) {
+      const remainingTriggers = FLICKER_COUNT - index - 1;
+      const minimumCandidate = index === 0
+        ? minimumIndex
+        : triggers[index - 1] + 3;
+      const maximumCandidate = maximumIndex - remainingTriggers * 3;
+      const evenPosition = minimumIndex
+        + ((maximumIndex - minimumIndex) * index) / Math.max(1, FLICKER_COUNT - 1);
+      const irregularPosition = Math.round(evenPosition) + randomInteger(-2, 2);
+
+      triggers.push(
+        Math.min(maximumCandidate, Math.max(minimumCandidate, irregularPosition)),
       );
-
-      if (triggers.every((trigger) => Math.abs(trigger - candidate) >= 6)) {
-        triggers.push(candidate);
-      }
-      attempts += 1;
     }
 
-    while (triggers.length < FLICKER_COUNT) {
-      const fallback = Math.round(
-        minimumIndex
-          + ((maximumIndex - minimumIndex) * (triggers.length + 1)) / (FLICKER_COUNT + 1),
-      );
-      if (!triggers.includes(fallback)) triggers.push(fallback);
-      else triggers.push(Math.min(maximumIndex, fallback + triggers.length));
-    }
-
-    return triggers.sort((a, b) => a - b);
+    return triggers;
   }
 
   function randomInteger(minimum, maximum) {
     return Math.floor(minimum + Math.random() * (maximum - minimum + 1));
   }
 
-  function renderFlicker(visibleText, showBlock) {
+  function renderFlicker(visibleText, strength) {
     const eligibleIndices = [...visibleText]
       .map((character, index) => ({ character, index }))
       .filter(({ character }) => !/\s/.test(character))
       .map(({ index }) => index);
-    const maximumFlicker = Math.min(5, Math.max(2, Math.floor(eligibleIndices.length * 0.12)));
-    const flickerCount = randomInteger(2, maximumFlicker);
+    const isStrong = strength === 'strong';
+    const maximumFlicker = Math.min(
+      isStrong ? 6 : 3,
+      Math.max(2, Math.floor(eligibleIndices.length * 0.2)),
+    );
+    const minimumFlicker = Math.min(isStrong ? 4 : 2, maximumFlicker);
+    const flickerCount = randomInteger(minimumFlicker, maximumFlicker);
     const start = randomInteger(0, Math.max(0, eligibleIndices.length - flickerCount));
     const flickerIndices = eligibleIndices.slice(start, start + flickerCount);
     const flickerIndexSet = new Set(flickerIndices);
-    const blockIndex = showBlock ? flickerIndices[0] : -1;
+    const dimmedIndices = new Set(
+      flickerIndices.slice(-Math.min(isStrong ? randomInteger(1, 2) : 1, flickerIndices.length)),
+    );
+    const blockIndex = isStrong ? flickerIndices[0] : -1;
     const sourceNode = output.firstChild;
     const originalWidths = new Map();
 
@@ -132,16 +139,23 @@ function initTypewriterText(element) {
 
         const glyph = document.createElement('span');
         glyph.className = 'typewriter-glyph';
-        glyph.textContent = Math.random() < 0.7
-          ? FLICKER_GLYPHS[randomInteger(0, FLICKER_GLYPHS.length - 1)]
-          : character;
-        if (glyph.textContent === character) glyph.classList.add('is-dimmed');
+        glyph.textContent = FLICKER_GLYPHS[randomInteger(0, FLICKER_GLYPHS.length - 1)];
+        if (dimmedIndices.has(sourceIndex)) glyph.classList.add('is-dimmed');
 
         const originalWidth = originalWidths.get(sourceIndex);
         if (originalWidth) glyph.style.width = `${originalWidth}px`;
 
         if (sourceIndex === blockIndex) {
           glyph.classList.add('has-block');
+          glyph.style.setProperty(
+            '--block-width',
+            `${randomInteger(BLOCK_MIN_WIDTH, BLOCK_MAX_WIDTH)}ch`,
+          );
+          glyph.style.setProperty(
+            '--block-height',
+            `${randomInteger(BLOCK_MIN_HEIGHT, BLOCK_MAX_HEIGHT)}%`,
+          );
+          glyph.style.setProperty('--block-opacity', BLOCK_OPACITY);
           activeBlock = glyph;
         }
 
@@ -194,13 +208,13 @@ function initTypewriterText(element) {
 
     if (flickerTrigger) {
       usedFlickerTriggers.add(flickerTrigger);
-      const activeBlock = renderFlicker(
-        visibleText,
-        blockFlickerTriggers.has(flickerTrigger),
-      );
+      const isStrong = blockFlickerTriggers.has(flickerTrigger);
+      const activeBlock = renderFlicker(visibleText, isStrong ? 'strong' : 'subtle');
       const blockDuration = randomInteger(BLOCK_MIN_DURATION, BLOCK_MAX_DURATION);
       const flickerDuration = Math.max(
-        randomInteger(FLICKER_MIN_DURATION, FLICKER_MAX_DURATION),
+        isStrong
+          ? randomInteger(Math.max(90, FLICKER_MIN_DURATION), FLICKER_MAX_DURATION)
+          : randomInteger(FLICKER_MIN_DURATION, Math.min(85, FLICKER_MAX_DURATION)),
         activeBlock ? blockDuration : 0,
       );
 
