@@ -33,16 +33,18 @@
       <section class="case-study-gate-panel" aria-label="Case study access">
         <form class="case-study-gate-form" data-case-study-auth>
           <label class="case-study-gate-label" for="case-study-password">Password</label>
-          <input
-            class="case-study-gate-input"
-            id="case-study-password"
-            name="password"
-            type="password"
-            autocomplete="current-password"
-            required
-            autofocus
-          />
-          <button class="button button-primary" type="submit">View case study</button>
+          <div class="case-study-gate-controls">
+            <input
+              class="case-study-gate-input"
+              id="case-study-password"
+              name="password"
+              type="password"
+              autocomplete="current-password"
+              required
+              autofocus
+            />
+            <button class="button button-primary" type="submit">View case study</button>
+          </div>
           <p class="case-study-gate-error" data-case-study-auth-error role="alert" aria-live="polite"></p>
         </form>
       </section>
