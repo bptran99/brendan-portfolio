@@ -5,15 +5,17 @@ const hero = document.querySelector('.hero');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const precisePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
 
-// GlitchTypewriterText timing controls.
+// FlickerTypewriterText timing controls.
 const TYPING_INTERVAL = 50;
-const GLITCH_COUNT = 4;
-const GLITCH_MIN_DURATION = 40;
-const GLITCH_MAX_DURATION = 80;
+const FLICKER_COUNT = 4;
+const FLICKER_MIN_DURATION = 40;
+const FLICKER_MAX_DURATION = 80;
+const BLOCK_MIN_DURATION = 40;
+const BLOCK_MAX_DURATION = 70;
 const CURSOR_BLINK_INTERVAL = 500;
 const CURSOR_HOLD_AFTER_COMPLETE = 1000;
 const CURSOR_FADE_DURATION = 160;
-const GLITCH_GLYPHS = '#%&@?*/+=<>[]{}01';
+const FLICKER_GLYPHS = '#%&@?*/+=<>[]{}01';
 
 if (window.location.protocol === 'file:') {
   document.querySelectorAll('[data-local-href]').forEach((link) => {
@@ -32,28 +34,31 @@ function initTypewriterText(element) {
   let characterIndex = 0;
   let typingTimer;
   let cursorTimer;
-  let glitchTimer;
+  let flickerTimer;
+  let blockTimer;
   let cursorHoldTimer;
   let cursorFadeTimer;
   let observer;
-  const glitchTriggers = createGlitchTriggers(fullText.length);
-  const usedGlitchTriggers = new Set();
+  const flickerTriggers = createFlickerTriggers(fullText.length);
+  const blockFlickerTriggers = new Set(flickerTriggers.filter((_, index) => index % 2 === 1));
+  const usedFlickerTriggers = new Set();
 
   function clearTimers() {
     window.clearTimeout(typingTimer);
     window.clearInterval(cursorTimer);
-    window.clearTimeout(glitchTimer);
+    window.clearTimeout(flickerTimer);
+    window.clearTimeout(blockTimer);
     window.clearTimeout(cursorHoldTimer);
     window.clearTimeout(cursorFadeTimer);
   }
 
-  function createGlitchTriggers(textLength) {
-    const minimumIndex = Math.min(18, Math.max(2, textLength - GLITCH_COUNT));
+  function createFlickerTriggers(textLength) {
+    const minimumIndex = Math.min(18, Math.max(2, textLength - FLICKER_COUNT));
     const maximumIndex = Math.max(minimumIndex, textLength - 5);
     const triggers = [];
     let attempts = 0;
 
-    while (triggers.length < GLITCH_COUNT && attempts < 100) {
+    while (triggers.length < FLICKER_COUNT && attempts < 100) {
       const candidate = Math.floor(
         minimumIndex + Math.random() * (maximumIndex - minimumIndex + 1),
       );
@@ -64,10 +69,10 @@ function initTypewriterText(element) {
       attempts += 1;
     }
 
-    while (triggers.length < GLITCH_COUNT) {
+    while (triggers.length < FLICKER_COUNT) {
       const fallback = Math.round(
         minimumIndex
-          + ((maximumIndex - minimumIndex) * (triggers.length + 1)) / (GLITCH_COUNT + 1),
+          + ((maximumIndex - minimumIndex) * (triggers.length + 1)) / (FLICKER_COUNT + 1),
       );
       if (!triggers.includes(fallback)) triggers.push(fallback);
       else triggers.push(Math.min(maximumIndex, fallback + triggers.length));
@@ -80,24 +85,32 @@ function initTypewriterText(element) {
     return Math.floor(minimum + Math.random() * (maximum - minimum + 1));
   }
 
-  function shuffled(values) {
-    return [...values].sort(() => Math.random() - 0.5);
-  }
-
-  function renderGlitch(visibleText) {
+  function renderFlicker(visibleText, showBlock) {
     const eligibleIndices = [...visibleText]
       .map((character, index) => ({ character, index }))
       .filter(({ character }) => !/\s/.test(character))
       .map(({ index }) => index);
-    const maximumCorruption = Math.min(5, Math.max(2, Math.floor(eligibleIndices.length * 0.12)));
-    const corruptionCount = randomInteger(2, maximumCorruption);
-    const start = randomInteger(0, Math.max(0, eligibleIndices.length - corruptionCount));
-    const corruptIndices = eligibleIndices.slice(start, start + corruptionCount);
-    const offsetIndices = new Set(shuffled(corruptIndices).slice(0, Math.min(2, corruptIndices.length)));
-    const blockIndices = new Set(shuffled(corruptIndices).slice(0, randomInteger(1, Math.min(2, corruptIndices.length))));
-    const corruptIndexSet = new Set(corruptIndices);
+    const maximumFlicker = Math.min(5, Math.max(2, Math.floor(eligibleIndices.length * 0.12)));
+    const flickerCount = randomInteger(2, maximumFlicker);
+    const start = randomInteger(0, Math.max(0, eligibleIndices.length - flickerCount));
+    const flickerIndices = eligibleIndices.slice(start, start + flickerCount);
+    const flickerIndexSet = new Set(flickerIndices);
+    const blockIndex = showBlock ? flickerIndices[0] : -1;
+    const sourceNode = output.firstChild;
+    const originalWidths = new Map();
+
+    if (sourceNode?.nodeType === Node.TEXT_NODE) {
+      flickerIndices.forEach((index) => {
+        const range = document.createRange();
+        range.setStart(sourceNode, index);
+        range.setEnd(sourceNode, index + 1);
+        originalWidths.set(index, range.getBoundingClientRect().width);
+      });
+    }
+
     const fragment = document.createDocumentFragment();
     let sourceIndex = 0;
+    let activeBlock;
 
     visibleText.split(/(\s+)/).forEach((segment) => {
       if (!segment) return;
@@ -111,7 +124,7 @@ function initTypewriterText(element) {
       word.className = 'typewriter-word';
 
       [...segment].forEach((character) => {
-        if (!corruptIndexSet.has(sourceIndex)) {
+        if (!flickerIndexSet.has(sourceIndex)) {
           word.append(document.createTextNode(character));
           sourceIndex += 1;
           return;
@@ -119,15 +132,18 @@ function initTypewriterText(element) {
 
         const glyph = document.createElement('span');
         glyph.className = 'typewriter-glyph';
-        glyph.textContent = character;
-        glyph.dataset.glitch = GLITCH_GLYPHS[randomInteger(0, GLITCH_GLYPHS.length - 1)];
+        glyph.textContent = Math.random() < 0.7
+          ? FLICKER_GLYPHS[randomInteger(0, FLICKER_GLYPHS.length - 1)]
+          : character;
+        if (glyph.textContent === character) glyph.classList.add('is-dimmed');
 
-        if (offsetIndices.has(sourceIndex)) {
-          const direction = Math.random() < 0.5 ? -1 : 1;
-          glyph.classList.add('is-offset');
-          glyph.style.setProperty('--glitch-offset', `${direction * randomInteger(1, 3)}px`);
+        const originalWidth = originalWidths.get(sourceIndex);
+        if (originalWidth) glyph.style.width = `${originalWidth}px`;
+
+        if (sourceIndex === blockIndex) {
+          glyph.classList.add('has-block');
+          activeBlock = glyph;
         }
-        if (blockIndices.has(sourceIndex)) glyph.classList.add('has-block');
 
         word.append(glyph);
         sourceIndex += 1;
@@ -137,6 +153,7 @@ function initTypewriterText(element) {
     });
 
     output.replaceChildren(fragment);
+    return activeBlock;
   }
 
   function finishImmediately() {
@@ -171,18 +188,33 @@ function initTypewriterText(element) {
     const visibleText = fullText.slice(0, characterIndex);
     output.textContent = visibleText;
 
-    const glitchTrigger = glitchTriggers.find(
-      (trigger) => trigger <= characterIndex && !usedGlitchTriggers.has(trigger),
+    const flickerTrigger = flickerTriggers.find(
+      (trigger) => trigger <= characterIndex && !usedFlickerTriggers.has(trigger),
     );
 
-    if (glitchTrigger) {
-      usedGlitchTriggers.add(glitchTrigger);
-      renderGlitch(visibleText);
-      glitchTimer = window.setTimeout(() => {
+    if (flickerTrigger) {
+      usedFlickerTriggers.add(flickerTrigger);
+      const activeBlock = renderFlicker(
+        visibleText,
+        blockFlickerTriggers.has(flickerTrigger),
+      );
+      const blockDuration = randomInteger(BLOCK_MIN_DURATION, BLOCK_MAX_DURATION);
+      const flickerDuration = Math.max(
+        randomInteger(FLICKER_MIN_DURATION, FLICKER_MAX_DURATION),
+        activeBlock ? blockDuration : 0,
+      );
+
+      if (activeBlock) {
+        blockTimer = window.setTimeout(() => {
+          activeBlock.classList.remove('has-block');
+        }, blockDuration);
+      }
+
+      flickerTimer = window.setTimeout(() => {
         output.textContent = visibleText;
         if (characterIndex >= fullText.length) finishTyping();
         else typingTimer = window.setTimeout(typeNextCharacter, TYPING_INTERVAL);
-      }, randomInteger(GLITCH_MIN_DURATION, GLITCH_MAX_DURATION));
+      }, flickerDuration);
       return;
     }
 

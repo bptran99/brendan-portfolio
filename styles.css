@@ -126,11 +126,10 @@ svg { width: 20px; fill: none; stroke: currentColor; stroke-linecap: round; stro
 .typewriter-frame { position: relative; display: block; }
 .typewriter-measure { visibility: hidden; }
 .typewriter-live { position: absolute; inset: 0; }
-.typewriter-word { white-space: nowrap; }
-.typewriter-glyph { position: relative; display: inline-block; color: transparent; }
-.typewriter-glyph::before { position: absolute; left: 0; color: var(--hero-on-surface); content: attr(data-glitch); }
-.typewriter-glyph.is-offset { transform: translateX(var(--glitch-offset)); }
-.typewriter-glyph.has-block::after { position: absolute; top: .48em; left: -.08em; width: .72em; height: .1em; background: var(--primary); content: ""; pointer-events: none; }
+.typewriter-word { display: inline-block; vertical-align: baseline; white-space: nowrap; }
+.typewriter-glyph { position: relative; display: inline-block; vertical-align: baseline; }
+.typewriter-glyph.is-dimmed { opacity: .35; }
+.typewriter-glyph.has-block::after { position: absolute; top: .48em; left: -.08em; width: 2.2em; height: .12em; background: var(--primary); content: ""; pointer-events: none; }
 .typewriter-cursor { display: inline; opacity: 1; transition: opacity 160ms ease; }
 .typewriter-cursor[hidden] { display: none; }
 .typewriter-cursor.is-invisible { visibility: hidden; }
