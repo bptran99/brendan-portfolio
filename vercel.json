@@ -18,6 +18,10 @@
       "destination": "/about/index.html"
     },
     {
+      "source": "/work/login",
+      "destination": "/work/login/index.html"
+    },
+    {
       "source": "/work/orange-rockland",
       "destination": "/work/orange-rockland/index.html"
     },

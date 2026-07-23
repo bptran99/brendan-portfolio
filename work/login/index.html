@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Case Study Access — Brendan Tran</title>
+    <link rel="icon" href="../../assets/favicon.png" type="image/png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet" />
+    <script>
+      (() => {
+        try {
+          const savedTheme = localStorage.getItem('portfolio-theme');
+          const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          document.documentElement.dataset.theme = savedTheme || systemTheme;
+        } catch { document.documentElement.dataset.theme = 'light'; }
+      })();
+    </script>
+    <link rel="stylesheet" href="../../styles.css" />
+    <script src="../../case-study-auth.js" defer></script>
+  </head>
+  <body>
+    <main class="case-study-gate" id="main">
+      <div class="hero-vhs" aria-hidden="true">
+        <span class="hero-vhs-bright"></span>
+        <span class="hero-vhs-dark"></span>
+        <span class="hero-vhs-tracking"></span>
+        <span class="hero-vhs-band"></span>
+      </div>
+      <a class="case-study-gate-brand" href="/home" data-local-href="../../index.html">Brendan Tran</a>
+      <section class="case-study-gate-panel" aria-labelledby="case-study-gate-title">
+        <p class="eyebrow">Protected work</p>
+        <h1 id="case-study-gate-title">Enter password</h1>
+        <p class="case-study-gate-intro">These case studies contain selected client work. Enter the shared password to continue.</p>
+        <form class="case-study-gate-form" data-case-study-auth>
+          <label class="case-study-gate-label" for="case-study-password">Password</label>
+          <input
+            class="case-study-gate-input"
+            id="case-study-password"
+            name="password"
+            type="password"
+            autocomplete="current-password"
+            required
+            autofocus
+          />
+          <button class="button button-primary" type="submit">View case study</button>
+          <p class="case-study-gate-error" data-case-study-auth-error role="alert" aria-live="polite"></p>
+        </form>
+      </section>
+    </main>
+  </body>
+</html>
