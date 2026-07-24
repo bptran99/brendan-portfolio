@@ -6,7 +6,7 @@ const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const precisePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
 
 // FlickerTypewriterText timing controls.
-const TYPING_INTERVAL = 50;
+const TYPING_INTERVAL = 25;
 const FLICKER_COUNT = 6;
 const FLICKER_MIN_DURATION = 60;
 const FLICKER_MAX_DURATION = 120;
