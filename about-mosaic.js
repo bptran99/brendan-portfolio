@@ -46,7 +46,7 @@ async function loadAboutMosaic() {
   if (!mosaicGrid) return;
 
   try {
-    const response = await fetch('/api/mosaic', {
+    const response = await fetch('/api/mosaic?v=2', {
       headers: { Accept: 'application/json' },
     });
 

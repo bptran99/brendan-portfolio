@@ -28,7 +28,7 @@ export default async function handler(request, response) {
         label: imageLabel(entry.name),
       }));
 
-    response.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=86400');
+    response.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=60');
     return response.status(200).json({ images });
   } catch {
     return response.status(200).json({ images: [] });
