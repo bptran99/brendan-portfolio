@@ -8,6 +8,11 @@
       "permanent": true
     }
   ],
+  "functions": {
+    "api/mosaic.js": {
+      "includeFiles": "assets/mosaic/**"
+    }
+  },
   "rewrites": [
     {
       "source": "/home",
