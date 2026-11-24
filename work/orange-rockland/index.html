@@ -3,12 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Orange &amp; Rockland case study by Brendan Tran." />
+    <meta name="description" content="How Brendan Tran led design for a residential energy dashboard within Orange &amp; Rockland's CARE initiative." />
     <link rel="canonical" href="https://www.brendantran.com/work/orange-rockland" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Brendan Tran" />
     <meta property="og:title" content="Orange &amp; Rockland — Brendan Tran" />
-    <meta property="og:description" content="Orange &amp; Rockland case study by Brendan Tran." />
+    <meta property="og:description" content="How Brendan Tran led design for a residential energy dashboard within Orange &amp; Rockland's CARE initiative." />
     <meta property="og:url" content="https://www.brendantran.com/work/orange-rockland" />
     <meta property="og:image" content="https://www.brendantran.com/assets/social-preview.png" />
     <meta property="og:image:alt" content="Brendan Tran — Senior Product Designer" />
@@ -26,18 +26,28 @@
         } catch { document.documentElement.dataset.theme = 'light'; }
       })();
     </script>
-    <link rel="stylesheet" href="../../styles.css" />
-    <script src="../../script.js" defer></script>
+    <link rel="stylesheet" href="../../assets/vendor/lenis/lenis.css" />
+    <link rel="stylesheet" href="../../styles.css?v=20261124-design-paired" />
+    <script src="../../assets/vendor/lenis/lenis.min.js" defer></script>
+    <script src="../../script.js?v=20261124-journey-fit" defer></script>
   </head>
-  <body>
+  <body class="oru-case-body">
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header shell">
-      <nav class="desktop-nav" aria-label="Primary navigation">
-        <a href="/home" data-local-href="../../index.html">Home</a>
-        <a href="/home#work" data-local-href="../../index.html#work" aria-current="page">Work</a>
-        <a href="/about" data-local-href="../../about/index.html">About</a>
-      </nav>
-      <a class="nav-name" href="/home" data-local-href="../../index.html" aria-label="Brendan Tran, home">Brendan Tran</a>
+      <div class="header-nav-group">
+        <nav class="desktop-nav" aria-label="Primary navigation">
+          <a href="/home" data-local-href="../../index.html">Home</a>
+          <a href="/home#work" data-local-href="../../index.html#work" aria-current="page">Work</a>
+          <a href="/about" data-local-href="../../about/index.html">About</a>
+        </nav>
+        <button class="menu-button" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu"><svg aria-hidden="true" viewBox="0 0 20 20"><path d="M3 6h14M3 14h14" /></svg></button>
+      </div>
+      <div class="header-identity">
+        <a class="case-back-link" href="/home#work" data-local-href="../../index.html#work" aria-label="Back to previous page"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M19 12H5m0 0 6-6m-6 6 6 6" /></svg></a>
+        <div class="header-brand-group">
+          <a class="nav-name" href="/home" data-local-href="../../index.html" aria-label="Brendan Tran, home">Brendan Tran</a>
+        </div>
+      </div>
       <div class="header-actions">
         <button class="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false" title="Switch to dark mode">
           <svg class="theme-icon theme-icon-sun" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.5" /><path d="M12 2.5v2M12 19.5v2M4.5 12h-2M21.5 12h-2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M18.7 5.3l-1.4 1.4M6.7 17.3l-1.4 1.4" /></svg>
@@ -46,27 +56,200 @@
         <a class="linkedin-link" href="https://linkedin.com/in/brendanptran" target="_blank" rel="noreferrer" aria-label="Brendan Tran on LinkedIn">
           <svg class="linkedin-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45Z" /></svg>
         </a>
-        <button class="menu-button" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu"><svg aria-hidden="true" viewBox="0 0 20 20"><path d="M3 6h14M3 14h14" /></svg></button>
       </div>
       <nav class="mobile-nav" id="mobile-menu" aria-label="Mobile navigation" hidden>
         <a href="/home" data-local-href="../../index.html">Home</a>
         <a href="/home#work" data-local-href="../../index.html#work" aria-current="page">Work</a>
         <a href="/about" data-local-href="../../about/index.html">About</a>
-        <a href="https://linkedin.com/in/brendanptran" target="_blank" rel="noreferrer">LinkedIn</a>
+        <div class="mobile-nav-actions" role="group" aria-label="Display and social options">
+          <button class="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false" title="Switch to dark mode">
+            <svg class="theme-icon theme-icon-sun" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.5" /><path d="M12 2.5v2M12 19.5v2M4.5 12h-2M21.5 12h-2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M18.7 5.3l-1.4 1.4M6.7 17.3l1.4 1.4" /></svg>
+            <svg class="theme-icon theme-icon-moon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 15.1A8 8 0 0 1 8.9 4a8.25 8.25 0 1 0 11.1 11.1Z" /></svg>
+            <span data-theme-label>Dark mode</span>
+          </button>
+          <a class="linkedin-link" href="https://linkedin.com/in/brendanptran" target="_blank" rel="noreferrer" aria-label="Brendan Tran on LinkedIn">
+            <svg class="linkedin-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45Z" /></svg>
+            <span>LinkedIn</span>
+          </a>
+        </div>
       </nav>
     </header>
-    <main class="case-study-page shell" id="main">
-      <header class="case-study-header">
-        <p class="eyebrow">Case study / 2025 — 2026</p>
-        <h1>Orange &amp; Rockland</h1>
-        <p class="case-study-intro">A detailed look at the process, decisions, and outcomes behind this work will be available here.</p>
-      </header>
-      <section class="case-study-placeholder" aria-labelledby="placeholder-title">
-        <p class="eyebrow">Project overview</p>
-        <h2 id="placeholder-title">Coming soon</h2>
-        <p>This case study is currently being prepared. Check back soon for the full story.</p>
-        <a class="button button-secondary" href="/home#work" data-local-href="../../index.html#work">Back to featured work ↑</a>
-      </section>
+    <main class="case-study-page case-study-oru" id="main">
+      <div class="oru-hero-stage">
+        <header class="case-study-header oru-case-header">
+          <div class="oru-hero-heading">
+            <h1>Orange &amp; Rockland</h1>
+          </div>
+          <p class="oru-hero-meta">Energy &amp; Utilities • Product Design • 2025 &amp; 2026</p>
+          <div class="oru-hero-intro-grid">
+            <p>O&amp;R CARE (Customer Analytics, Reporting and Engagement) is an initiative that includes a residential dashboard for exploring energy use and personalized recommendations.</p>
+            <p>I led discovery through handoff as Senior Product Designer, aligning O&amp;R product and program teams with technical partners. The MVP launched mid-2026.</p>
+          </div>
+        </header>
+
+        <figure class="oru-hero-visual">
+          <img src="../../assets/oru_thumbnail.png" alt="O&amp;R clean energy dashboard concept with an energy usage view and clean energy recommendation cards." />
+        </figure>
+      </div>
+
+      <div class="shell oru-content-shell">
+        <div class="oru-case-layout">
+          <aside class="oru-case-sidebar" aria-label="Case study navigation">
+            <nav class="oru-case-nav" aria-label="Case study sections">
+              <a href="#overview" aria-current="location">
+                <span class="oru-nav-label">Overview</span>
+                <span class="oru-nav-detail"><span class="oru-nav-detail-inner"><strong class="oru-nav-title" data-nav-title>Making home energy decisions easier</strong><span class="oru-nav-description" data-nav-description>Within the O&amp;R CARE initiative, a customer dashboard helps residential customers explore their energy use, compare it with efficient homes, and find personalized energy-efficiency recommendations.</span></span></span>
+              </a>
+              <a href="#challenge"><span class="oru-nav-label">Challenge</span><span class="oru-nav-detail"><span class="oru-nav-detail-inner"><strong class="oru-nav-title" data-nav-title></strong><span class="oru-nav-description" data-nav-description></span></span></span></a>
+              <a href="#research"><span class="oru-nav-label">Research</span><span class="oru-nav-detail"><span class="oru-nav-detail-inner"><strong class="oru-nav-title" data-nav-title></strong><span class="oru-nav-description" data-nav-description></span></span></span></a>
+              <a href="#design"><span class="oru-nav-label">Design</span><span class="oru-nav-detail"><span class="oru-nav-detail-inner"><strong class="oru-nav-title" data-nav-title></strong><span class="oru-nav-description" data-nav-description></span></span></span></a>
+            </nav>
+          </aside>
+
+          <div class="oru-case-content">
+            <section class="oru-visual-section" id="overview" data-nav-section aria-label="Overview">
+              <h2 class="oru-section-label">Overview</h2>
+              <div class="oru-section-panel">
+              <div class="oru-mobile-section-intro">
+                <div class="oru-section-heading">
+                  <h2>Making home energy decisions easier</h2>
+                </div>
+                <p class="oru-section-summary">Within the O&amp;R CARE initiative, a customer dashboard helps residential customers explore their energy use, compare it with efficient homes, and find personalized energy-efficiency recommendations.</p>
+              </div>
+              <section class="oru-impact" aria-labelledby="oru-impact-title">
+                <h2 id="oru-impact-title">Impact</h2>
+                <p class="oru-impact-intro">Early engagement after launch</p>
+                <dl class="oru-impact-stats">
+                  <div class="oru-impact-stat">
+                    <dt>Average session duration</dt>
+                    <dd><span class="oru-impact-value" data-impact-count="194" data-impact-format="duration" aria-hidden="true">3m 14s</span><span class="visually-hidden">3 minutes 14 seconds</span></dd>
+                  </div>
+                  <div class="oru-impact-stat">
+                    <dt>of viewers clicked a recommended program</dt>
+                    <dd><span class="oru-impact-value" data-impact-count="56" data-impact-format="percent" aria-hidden="true">56%</span><span class="visually-hidden">56 percent</span></dd>
+                  </div>
+                </dl>
+              </section>
+              </div>
+            </section>
+
+            <section class="oru-visual-section" id="challenge" data-nav-section aria-label="Challenge">
+              <h2 class="oru-section-label">Challenge</h2>
+              <div class="oru-section-panel">
+              <div class="oru-mobile-section-intro">
+                <div class="oru-section-heading">
+                  <h2>A list of programs wasn't enough</h2>
+                </div>
+                <p class="oru-section-summary">Customers needed to understand which energy options could fit their home, what those options involved, and where to begin before committing to a program.</p>
+              </div>
+              <figure class="oru-journey">
+                <div class="oru-journey-scroll" tabindex="0" role="region" aria-label="Customer journey map; scroll horizontally to explore">
+                  <div class="oru-journey-canvas">
+                    <div class="oru-journey-heading"><h3>From uncertainty to a supported next step</h3></div>
+                    <div class="oru-journey-stages">
+                      <div class="oru-journey-stage"><h4>Discover</h4><div class="oru-journey-note"><p>Programs are scattered. Where do I start?</p></div><div class="oru-journey-note oru-journey-future"><p>A personalized place to begin.</p></div></div>
+                      <div class="oru-journey-stage"><h4>Consider</h4><div class="oru-journey-note"><p>Will the upgrades be worth the cost?</p></div><div class="oru-journey-note oru-journey-future"><p>Clear information, an assessment, and advisor support.</p></div></div>
+                      <div class="oru-journey-stage"><h4>Take action</h4><div class="oru-journey-note"><p>Who can I trust, and what happens next?</p></div><div class="oru-journey-note oru-journey-future"><p>Contractor resources and clearer next steps.</p></div></div>
+                      <div class="oru-journey-stage"><h4>See progress</h4><div class="oru-journey-note"><p>Did the upgrade help? What should I do next?</p></div><div class="oru-journey-note oru-journey-future"><p>Make progress, impact, and future options visible.</p></div></div>
+                    </div>
+                  </div>
+                </div>
+                <figcaption>A condensed journey map based on project discovery; future opportunities extend beyond the launched MVP.</figcaption>
+              </figure>
+              <div class="oru-section-content">
+                <h3>Interest didn’t make the next step obvious</h3>
+                <p>O&amp;R wanted to grow participation in energy efficiency and clean energy programs. For customers, the path from a high energy bill to a home improvement could involve unfamiliar technology, program rules, assessments, and contractors.</p>
+                <p>The opportunity was to connect those pieces: help customers understand their options and find a useful next step, whether they were ready to pursue a program or still learning.</p>
+                <h3>Designing alongside a changing product</h3>
+                <p>Program offerings and data integrations were evolving as the dashboard took shape. I used journey maps, wireframes, and design reviews to make the experience tangible and align product, business, and technical partners around an MVP.</p>
+              </div>
+              </div>
+            </section>
+
+            <section class="oru-visual-section" id="research" data-nav-section aria-label="Research">
+              <h2 class="oru-section-label">Research</h2>
+              <div class="oru-section-panel">
+              <div class="oru-mobile-section-intro">
+                <div class="oru-section-heading">
+                  <h2>Customers wanted a trusted guide</h2>
+                </div>
+                <p class="oru-section-summary">Research revealed gaps in energy knowledge and concerns about cost, disruption, and contractors. Prototype feedback reinforced the need for professional validation alongside self-service information.</p>
+              </div>
+              <div class="oru-research-board" aria-labelledby="oru-research-board-title">
+                <h3 id="oru-research-board-title">What we learned</h3>
+                <div class="oru-research-findings">
+                  <div class="oru-research-finding">
+                    <span class="oru-research-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 19h4a4 4 0 0 0 4-4v-1a4 4 0 0 1 4-4h4M16 6l4 4-4 4"/><circle cx="4" cy="19" r="1.5"/></svg></span>
+                    <h4>Hard to get started</h4>
+                    <p>The process and next steps felt overwhelming.</p>
+                  </div>
+                  <div class="oru-research-finding">
+                    <span class="oru-research-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 6v12m3-9.5c-.6-.7-1.6-1.1-3-1.1-1.8 0-3 1-3 2.3 0 1.4 1.1 2.1 3 2.4s3 1 3 2.4-1.2 2.4-3 2.4c-1.4 0-2.5-.4-3.2-1.2"/></svg></span>
+                    <h4>Value is uncertain</h4>
+                    <p>Costs felt risky and savings were hard to predict.</p>
+                  </div>
+                  <div class="oru-research-finding">
+                    <span class="oru-research-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.6 2.8 7.8 7 10 4.2-2.2 7-5.4 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></svg></span>
+                    <h4>Trust is essential</h4>
+                    <p>Customers wanted credible guidance and contractors.</p>
+                  </div>
+                </div>
+                <div class="oru-research-implication">
+                  <p>Design implication</p>
+                  <strong>Help customers understand their options and find support before committing to a project.</strong>
+                </div>
+              </div>
+              <div class="oru-section-content">
+                <h3>The barriers started before enrollment</h3>
+                <p>West Monroe’s weatherization research included seven small focus groups with prospective participants and four interviews with customers who had completed projects. Participants described uncertainty about cost, disruption, potential savings, and where to find a contractor. Many were also unfamiliar with available programs and rebates.</p>
+                <p>Separate trust research with O&amp;R customers found that limited understanding of energy use and unclear information could make it harder to trust the utility’s guidance. These qualitative findings helped frame education and clarity as part of the product experience.</p>
+                <h3>Make room for human guidance</h3>
+                <p>In pre-launch prototype research with O&amp;R customers, feedback reinforced the need for professional validation alongside self-service information. I incorporated a “Speak with an advisor” option so customers could ask questions before deciding what to do next.</p>
+              </div>
+              </div>
+            </section>
+
+            <section class="oru-visual-section" id="design" data-nav-section aria-label="Design">
+              <h2 class="oru-section-label">Design</h2>
+              <div class="oru-section-panel">
+              <div class="oru-mobile-section-intro">
+                <div class="oru-section-heading">
+                  <h2>From information to supported action</h2>
+                </div>
+                <p class="oru-section-summary">I designed an experience that pairs energy information and recommendations with lower-commitment next steps, including an assessment and the option to speak with an advisor.</p>
+              </div>
+              <div class="oru-design-features">
+                <div class="oru-design-feature">
+                  <div class="oru-design-feature-copy">
+                    <h3>Start with the customer’s energy context</h3>
+                    <p>The dashboard brought energy usage and comparisons together with recommendations and resources. I designed the experience to give customers a starting point for exploring their home’s energy needs, rather than asking them to navigate a list of programs alone.</p>
+                  </div>
+                  <figure class="oru-overview-visual oru-overview-usage">
+                  <img src="../../assets/oru-overview-usage.png" width="4520" height="2904" alt="Dashboard chart showing household electricity costs over time alongside weather." />
+                  </figure>
+                </div>
+                <div class="oru-design-feature">
+                  <div class="oru-design-feature-copy">
+                    <h3>Offer a next step for different levels of readiness</h3>
+                    <p>Recommendation cards paired education about improvements with paths to programs and resources. Alongside those links, a virtual assessment and advisor support gave customers ways to learn more before committing to a larger project.</p>
+                  </div>
+                  <figure class="oru-overview-visual oru-overview-recommendations">
+                  <img src="../../assets/oru-overview-recommendations.png" width="4520" height="2904" alt="Heat pump recommendation with educational information, advisor support, and a link to participating contractors." />
+                  </figure>
+                </div>
+              </div>
+              <div class="oru-section-content">
+                <h3>Build a foundation for learning</h3>
+                <p>The MVP launched with usage information, assessment access, recommendations, and program resources. Two-way Brillion data exchange and behavioral analytics came later, creating opportunities to better understand how customers move through the experience.</p>
+                <h3>Next opportunity: guidance beyond the click</h3>
+                <p>Program link clicks show exploration, but they don’t tell us what happened after customers left the dashboard. A potential next step is a project tracker that shows milestones, status, and the next action—from assessment through completion. It would require reliable cross-system status data before it could be validated or measured.</p>
+              </div>
+              </div>
+            </section>
+          </div>
+        </div>
+        <a class="button button-secondary oru-back-link" href="/home#work" data-local-href="../../index.html#work"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M19 12H5m0 0 6-6m-6 6 6 6" /></svg>Back to Selected Work</a>
+      </div>
     </main>
     <footer class="site-footer shell"><p>© <span id="year">2026</span> Brendan Tran</p><a class="footer-contact" href="mailto:bptran99@gmail.com">bptran99@gmail.com</a><nav class="footer-nav" aria-label="Footer navigation"><a href="#main">Back to top ↑</a></nav></footer>
   </body>

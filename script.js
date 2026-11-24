@@ -1,9 +1,42 @@
 const menuButton = document.querySelector('.menu-button');
 const mobileMenu = document.querySelector('#mobile-menu');
-const themeToggle = document.querySelector('.theme-toggle');
+const siteHeader = document.querySelector('.site-header');
+const themeToggles = document.querySelectorAll('.theme-toggle');
+const mobileThemeLabels = document.querySelectorAll('[data-theme-label]');
 const hero = document.querySelector('.hero');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const precisePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+
+// Lenis smooths wheel scrolling; touch and reduced-motion preferences stay native.
+const resistanceSections = [...document.querySelectorAll('.oru-case-content [data-nav-section]')];
+let smoothScroll = null;
+if (typeof window.Lenis === 'function') {
+  smoothScroll = new window.Lenis({
+    autoRaf: true, anchors: true, syncTouch: false, lerp: 0.07,
+    stopInertiaOnNavigate: true, respectReducedMotion: true,
+    virtualScroll(data) {
+      if (!smoothScroll || !resistanceSections.length || reducedMotion.matches ||
+          data.event.type !== 'wheel' || data.event.ctrlKey || data.event.metaKey ||
+          data.event.shiftKey || !data.deltaY || Math.abs(data.deltaY) > 180) return;
+
+      // Ease wheel input near boundaries without preventing a reader from passing through.
+      const resistanceRange = 160;
+      const minimumMultiplier = 0.7;
+      const position = smoothScroll.targetScroll;
+      let distance = resistanceRange;
+      resistanceSections.forEach((section) => {
+        const offset = parseFloat(getComputedStyle(section).scrollMarginTop) || 0;
+        const boundary = section.getBoundingClientRect().top + window.scrollY - offset;
+        const before = boundary - position;
+        const after = boundary - (position + data.deltaY);
+        const nearest = before * after <= 0 ? 0 : Math.min(Math.abs(before), Math.abs(after));
+        distance = Math.min(distance, nearest);
+      });
+      const influence = 1 - distance / resistanceRange;
+      data.deltaY *= 1 - (1 - minimumMultiplier) * influence;
+    },
+  });
+}
 
 // FlickerTypewriterText timing controls.
 const TYPING_INTERVAL = 25;
@@ -26,6 +59,19 @@ if (window.location.protocol === 'file:') {
   document.querySelectorAll('[data-local-href]').forEach((link) => {
     link.setAttribute('href', link.dataset.localHref);
   });
+}
+
+const caseBackLink = document.querySelector('.case-back-link');
+if (caseBackLink) {
+  try {
+    const previousPage = new URL(document.referrer);
+    const isWebPage = ['http:', 'https:', 'file:'].includes(previousPage.protocol);
+    const isCurrentPage = previousPage.origin === location.origin && previousPage.pathname === location.pathname;
+    if (isWebPage && !isCurrentPage) caseBackLink.href = previousPage.href;
+    else caseBackLink.setAttribute('aria-label', 'Back to featured work');
+  } catch {
+    caseBackLink.setAttribute('aria-label', 'Back to featured work');
+  }
 }
 
 function initTypewriterText(element) {
@@ -423,9 +469,14 @@ reducedMotion.addEventListener('change', (event) => {
 function applyTheme(theme, persist = false) {
   const isDark = theme === 'dark';
   document.documentElement.dataset.theme = theme;
-  themeToggle?.setAttribute('aria-pressed', String(isDark));
-  themeToggle?.setAttribute('aria-label', `Switch to ${isDark ? 'light' : 'dark'} mode`);
-  themeToggle?.setAttribute('title', `Switch to ${isDark ? 'light' : 'dark'} mode`);
+  themeToggles.forEach((themeToggle) => {
+    themeToggle.setAttribute('aria-pressed', String(isDark));
+    themeToggle.setAttribute('aria-label', `Switch to ${isDark ? 'light' : 'dark'} mode`);
+    themeToggle.setAttribute('title', `Switch to ${isDark ? 'light' : 'dark'} mode`);
+  });
+  mobileThemeLabels.forEach((label) => {
+    label.textContent = isDark ? 'Light mode' : 'Dark mode';
+  });
 
   if (persist) {
     try {
@@ -438,15 +489,18 @@ function applyTheme(theme, persist = false) {
 
 applyTheme(document.documentElement.dataset.theme || 'light');
 
-themeToggle?.addEventListener('click', () => {
-  const nextTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-  applyTheme(nextTheme, true);
+themeToggles.forEach((themeToggle) => {
+  themeToggle.addEventListener('click', () => {
+    const nextTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    applyTheme(nextTheme, true);
+  });
 });
 
 menuButton?.addEventListener('click', () => {
   const isOpen = menuButton.getAttribute('aria-expanded') === 'true';
   menuButton.setAttribute('aria-expanded', String(!isOpen));
   menuButton.setAttribute('aria-label', isOpen ? 'Open menu' : 'Close menu');
+  siteHeader?.classList.toggle('menu-open', !isOpen);
   mobileMenu.hidden = isOpen;
 });
 
@@ -454,8 +508,218 @@ mobileMenu?.querySelectorAll('a').forEach((link) => {
   link.addEventListener('click', () => {
     menuButton?.setAttribute('aria-expanded', 'false');
     menuButton?.setAttribute('aria-label', 'Open menu');
+    siteHeader?.classList.remove('menu-open');
     mobileMenu.hidden = true;
   });
 });
+
+function initOruCaseNavigation() {
+  const nav = document.querySelector('.oru-case-nav');
+  if (!nav) return;
+
+  const links = [...nav.querySelectorAll('a[href^="#"]')];
+  const sections = links
+    .map((link) => document.querySelector(link.getAttribute('href')))
+    .filter((section) => section?.matches('[data-nav-section]'));
+  let updateFrame;
+  let activeSection;
+  let lastScrollY = window.scrollY;
+  const activationLines = new Map();
+
+  function setActiveSection(section) {
+    if (!section) return;
+    const link = links.find((item) => item.getAttribute('href') === `#${section.id}`);
+    if (!link || activeSection === section) return;
+    activeSection = section;
+
+    links.forEach((item) => {
+      if (item === link) item.setAttribute('aria-current', 'location');
+      else item.removeAttribute('aria-current');
+    });
+
+    const title = section.querySelector('.oru-section-heading h2');
+    const description = section.querySelector(
+      '.oru-section-summary',
+    );
+    const linkTitle = link.querySelector('[data-nav-title]');
+    const linkDescription = link.querySelector('[data-nav-description]');
+
+    if (title && linkTitle) linkTitle.textContent = title.textContent.trim();
+    if (description && linkDescription) linkDescription.textContent = description.textContent.trim();
+  }
+
+  function updateCurrentSection() {
+    const direction = Math.sign(window.scrollY - lastScrollY);
+    lastScrollY = window.scrollY;
+
+    // On smaller screens the sidebar is hidden, so retain the reading-position
+    // fallback rather than measuring invisible navigation items.
+    if (!nav.getClientRects().length) {
+      const readingPosition = Math.min(window.innerHeight * 0.4, 360);
+      let currentSection = sections[0];
+      sections.forEach((section) => {
+        if (section.getBoundingClientRect().top <= readingPosition) currentSection = section;
+      });
+      setActiveSection(currentSection);
+      return;
+    }
+
+    let index = Math.max(0, sections.indexOf(activeSection));
+    if (direction > 0 || !activeSection) {
+      while (index + 1 < sections.length) {
+        const next = sections[index + 1];
+        const nextLink = links.find((item) => item.getAttribute('href') === `#${next.id}`);
+        const line = nextLink.getBoundingClientRect().top;
+        if ((next.querySelector('.oru-section-panel') || next).getBoundingClientRect().top > line) break;
+        // Remember the collapsed item's position: opening it moves the anchors,
+        // so comparing against its new position would cause flicker in reverse.
+        activationLines.set(next, line);
+        index += 1;
+      }
+    } else if (direction < 0) {
+      while (index > 0) {
+        const current = sections[index];
+        const currentLink = links.find((item) => item.getAttribute('href') === `#${current.id}`);
+        const line = activationLines.get(current) ?? currentLink.getBoundingClientRect().top;
+        if ((current.querySelector('.oru-section-panel') || current).getBoundingClientRect().top <= line) break;
+        index -= 1;
+      }
+    }
+    setActiveSection(sections[index]);
+  }
+
+  function scheduleUpdate() {
+    if (updateFrame) return;
+    updateFrame = window.requestAnimationFrame(() => {
+      updateFrame = undefined;
+      updateCurrentSection();
+    });
+  }
+
+  window.addEventListener('scroll', scheduleUpdate, { passive: true });
+  window.addEventListener('resize', () => {
+    activationLines.clear();
+    scheduleUpdate();
+  });
+  window.addEventListener('hashchange', scheduleUpdate);
+  window.addEventListener('load', scheduleUpdate, { once: true });
+
+  if ('IntersectionObserver' in window) {
+    const sectionObserver = new IntersectionObserver(scheduleUpdate, {
+      rootMargin: '-35% 0px -55% 0px',
+      threshold: 0,
+    });
+    sections.forEach((section) => sectionObserver.observe(section));
+  }
+
+  updateCurrentSection();
+}
+
+initOruCaseNavigation();
+
+function initOruHeroFade() {
+  const stage = document.querySelector('.oru-hero-stage');
+  const header = document.querySelector('.oru-case-header');
+  const image = document.querySelector('.oru-hero-visual img');
+  if (!stage || !header || !image) return;
+  const textItems = header.querySelectorAll('.oru-hero-heading, .oru-hero-meta, .oru-hero-intro-grid p');
+
+  let frame;
+  function update() {
+    frame = undefined;
+    const stageTop = stage.getBoundingClientRect().top;
+    const headerTop = header.getBoundingClientRect().top;
+    const imageTop = image.parentElement.getBoundingClientRect().top;
+    const stickyTop = parseFloat(getComputedStyle(header).top) || 0;
+    const imageStart = imageTop - stageTop;
+    const scrollDistance = Math.max(0, -stageTop);
+    // The thumbnail reaches full size when it has entered the viewport.
+    const scaleDistance = window.innerHeight * (window.matchMedia('(max-width: 960px)').matches ? 1 : 2);
+    const scaleProgress = reducedMotion.matches ? 1 : Math.min(1, scrollDistance / scaleDistance);
+    const imageTravel = Math.max(window.innerHeight * 0.2, imageStart + Math.min(image.offsetHeight, window.innerHeight) - window.innerHeight);
+    const imageProgress = reducedMotion.matches ? 1 : Math.min(1, scrollDistance / imageTravel);
+    stage.style.setProperty('--oru-visual-scale', String(reducedMotion.matches ? 1 : 0.8 + 0.2 * imageProgress));
+    stage.style.setProperty('--oru-hero-scale', String(reducedMotion.matches ? 1 : 1 - 0.2 * scaleProgress));
+    textItems.forEach((item) => {
+      const itemStart = stickyTop + item.getBoundingClientRect().top - headerTop;
+      const fadeDistance = Math.max(1, imageStart - itemStart);
+      const progress = reducedMotion.matches ? 0 : Math.min(1, scrollDistance / fadeDistance);
+      const opacity = progress >= 1 ? 0 : 1 - 0.82 * progress;
+      item.style.setProperty('--oru-hero-text-opacity', String(opacity));
+    });
+  }
+  function scheduleUpdate() {
+    if (frame === undefined) frame = requestAnimationFrame(update);
+  }
+  window.addEventListener('scroll', scheduleUpdate, { passive: true });
+  window.addEventListener('resize', scheduleUpdate);
+  reducedMotion.addEventListener('change', scheduleUpdate);
+  update();
+}
+
+initOruHeroFade();
+
+function initOruJourneyFit() {
+  const viewport = document.querySelector('.oru-journey-scroll');
+  const canvas = viewport?.querySelector('.oru-journey-canvas');
+  if (!viewport || !canvas) return;
+
+  function fit() {
+    const scale = Math.min(1, viewport.clientWidth / canvas.offsetWidth);
+    const height = Math.ceil(canvas.offsetHeight * scale) + 2;
+    viewport.style.setProperty('--oru-journey-scale', String(scale));
+    viewport.style.setProperty('--oru-journey-height', `${height}px`);
+    viewport.classList.add('is-fitted');
+    viewport.setAttribute('aria-label', 'Customer journey map');
+    viewport.removeAttribute('tabindex');
+  }
+
+  if ('ResizeObserver' in window) new ResizeObserver(fit).observe(viewport);
+  window.addEventListener('resize', fit);
+  window.addEventListener('load', fit, { once: true });
+  document.fonts?.ready.then(fit);
+  fit();
+}
+
+initOruJourneyFit();
+
+function initOruImpactCounts() {
+  const values = document.querySelectorAll('[data-impact-count]');
+  if (!values.length || !('IntersectionObserver' in window)) return;
+
+  function format(value, type) {
+    if (type === 'duration') return `${Math.floor(value / 60)}m ${String(value % 60).padStart(2, '0')}s`;
+    if (type === 'percent') return `${value}%`;
+    return value.toLocaleString();
+  }
+
+  function animate(element) {
+    const target = Number(element.dataset.impactCount);
+    const type = element.dataset.impactFormat;
+    if (reducedMotion.matches || !Number.isFinite(target)) return;
+    const duration = 1400;
+    let start;
+    element.textContent = format(0, type);
+    function step(timestamp) {
+      if (start === undefined) start = timestamp;
+      const progress = reducedMotion.matches ? 1 : Math.min(1, (timestamp - start) / duration);
+      const eased = 1 - (1 - progress) ** 3;
+      element.textContent = format(Math.round(target * eased), type);
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      observer.unobserve(entry.target);
+      animate(entry.target);
+    });
+  }, { threshold: 0.5 });
+  values.forEach((value) => observer.observe(value));
+}
+
+initOruImpactCounts();
 
 document.querySelector('#year').textContent = new Date().getFullYear();
