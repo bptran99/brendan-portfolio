@@ -35,6 +35,9 @@ function initTypewriterText(element) {
   const cursor = element.querySelector('[data-typewriter-cursor]');
   const fullText = element.dataset.typewriterText;
   if (!output || !cursor || !fullText) return;
+  const nameText = 'Brendan Tran';
+  const nameStart = fullText.indexOf(nameText);
+  const nameEnd = nameStart + nameText.length;
 
   let characterIndex = 0;
   let typingTimer;
@@ -84,6 +87,21 @@ function initTypewriterText(element) {
     return Math.floor(minimum + Math.random() * (maximum - minimum + 1));
   }
 
+  function applyNameAccent() {
+    if (nameStart < 0 || !output.firstChild || output.firstChild.nodeType !== Node.TEXT_NODE) return;
+
+    const visibleEnd = Math.min(output.textContent.length, nameEnd);
+    if (visibleEnd <= nameStart) return;
+
+    const range = document.createRange();
+    range.setStart(output.firstChild, nameStart);
+    range.setEnd(output.firstChild, visibleEnd);
+
+    const accent = document.createElement('span');
+    accent.className = 'hero-name-accent';
+    range.surroundContents(accent);
+  }
+
   function renderFlicker(visibleText, strength) {
     const eligibleIndices = [...visibleText]
       .map((character, index) => ({ character, index }))
@@ -129,6 +147,9 @@ function initTypewriterText(element) {
 
       const word = document.createElement('span');
       word.className = 'typewriter-word';
+      if (nameStart >= 0 && sourceIndex < nameEnd && sourceIndex + segment.length > nameStart) {
+        word.classList.add('hero-name-accent');
+      }
 
       [...segment].forEach((character) => {
         if (!flickerIndexSet.has(sourceIndex)) {
@@ -173,6 +194,7 @@ function initTypewriterText(element) {
   function finishImmediately() {
     clearTimers();
     output.textContent = fullText;
+    applyNameAccent();
     cursor.hidden = true;
     cursor.classList.remove('is-invisible', 'is-fading');
     observer?.disconnect();
@@ -226,11 +248,14 @@ function initTypewriterText(element) {
 
       flickerTimer = window.setTimeout(() => {
         output.textContent = visibleText;
+        applyNameAccent();
         if (characterIndex >= fullText.length) finishTyping();
         else typingTimer = window.setTimeout(typeNextCharacter, TYPING_INTERVAL);
       }, flickerDuration);
       return;
     }
+
+    applyNameAccent();
 
     if (characterIndex >= fullText.length) {
       finishTyping();
