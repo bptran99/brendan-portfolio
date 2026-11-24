@@ -96,6 +96,7 @@ svg { width: 20px; fill: none; stroke: currentColor; stroke-linecap: round; stro
 :focus-visible { outline: 3px solid var(--tertiary); outline-offset: 4px; }
 
 .site-header { position: sticky; top: 0; z-index: 100; display: flex; min-height: var(--site-header-height); align-items: center; justify-content: space-between; isolation: isolate; pointer-events: none; }
+.home-page .site-header { position: absolute; top: 0; left: 50%; width: min(100%, var(--max-width)); transform: translateX(-50%); }
 .site-header::before { display: none; }
 .header-nav-group, .header-brand-group, .header-actions { position: relative; display: flex; min-height: 56px; align-items: center; border: 1px solid var(--outline-variant); border-radius: 999px; background: var(--surface-lowest); box-shadow: 0 8px 24px rgb(0 0 0 / 10%); pointer-events: auto; }
 .header-nav-group { position: absolute; left: 50%; padding: 4px; transform: translateX(-50%); }
@@ -128,7 +129,7 @@ svg { width: 20px; fill: none; stroke: currentColor; stroke-linecap: round; stro
 .hero-vhs-tracking { inset: 0; background: linear-gradient(90deg, transparent 0 6%, #ffffff 6% 38%, transparent 38%) 0 12% / 100% 1px no-repeat, linear-gradient(90deg, transparent 0 48%, #d9d9d9 48% 83%, transparent 83%) 0 29% / 100% 2px no-repeat, linear-gradient(90deg, transparent 0 18%, #ffffff 18% 64%, transparent 64%) 0 52% / 100% 1px no-repeat, linear-gradient(90deg, transparent 0 69%, #cfcfcf 69% 94%, transparent 94%) 0 73% / 100% 3px no-repeat, linear-gradient(90deg, transparent 0 3%, #ffffff 3% 27%, transparent 27%) 0 88% / 100% 1px no-repeat; opacity: var(--vhs-tracking-opacity); animation: vhs-broken-tracking var(--vhs-tracking-speed) steps(1, end) infinite; mix-blend-mode: screen; will-change: transform, opacity; }
 .hero-vhs-band { top: 61%; right: -4%; left: -4%; height: 10%; background-image: radial-gradient(circle, #ffffff 0 1px, transparent 1.8px), repeating-linear-gradient(to bottom, transparent 0 3px, #ffffff 4px, transparent 6px); background-size: 8px 7px, 100% 7px; opacity: 0; animation: vhs-static-band calc(var(--vhs-tracking-speed) + 3s) steps(1, end) infinite; mix-blend-mode: screen; will-change: transform, opacity; }
 .eyebrow, .project-meta { margin: 0; font-family: var(--font-mono); font-size: 12px; font-weight: 500; letter-spacing: .04em; text-transform: uppercase; }
-.hero-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; align-items: center; min-height: calc(100svh - var(--site-header-height)); padding-block: clamp(32px, 5vh, 56px); }
+.hero-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; align-items: center; min-height: 100svh; padding-block: clamp(32px, 5vh, 56px); }
 .hero-copy { position: relative; z-index: 3; width: min(100%, 920px); min-width: 0; margin-inline: auto; text-align: center; }
 .hero-title { max-width: 900px; margin: 0 auto; color: var(--hero-on-surface); font-family: var(--font-display); font-size: clamp(28px, 2vw, 32px); font-weight: 700; letter-spacing: -.035em; line-height: 1.06; text-align: center; }
 .typewriter-frame { position: relative; display: block; }
@@ -410,7 +411,7 @@ body.oru-case-body { overflow-x: clip; }
 
 @media (max-width: 900px) {
   :root { --margin: 24px; --gutter: 20px; }
-  .hero-grid { gap: 0; min-height: calc(100svh - var(--site-header-height)); padding-block: clamp(32px, 5vh, 48px); }
+  .hero-grid { gap: 0; min-height: 100svh; padding-block: clamp(32px, 5vh, 48px); }
   .section-note { margin-top: 18px; }
   .project-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .project-featured .project-link { display: flex; }
@@ -425,7 +426,7 @@ body.oru-case-body { overflow-x: clip; }
 
 @media (max-width: 640px) {
   :root { --margin: 16px; --gutter: 16px; }
-  .hero-grid { gap: 0; min-height: calc(100svh - var(--site-header-height)); padding-block: 28px; }
+  .hero-grid { gap: 0; min-height: 100svh; padding-block: 28px; }
   .hero-title { font-size: 28px; line-height: 1.08; }
   .hero-intro { font-size: 16px; line-height: 24px; }
   .hero-actions { align-items: center; flex-direction: row; }
