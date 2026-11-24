@@ -247,8 +247,8 @@ h2, h3 { margin: 0; font-family: var(--font-display); }
 .project-placeholder { background: var(--surface-high); }
 .project-info { display: flex; flex: 1; flex-direction: column; padding: 14px 8px 0; }
 .project-meta { color: var(--on-surface); font-family: var(--font-body); font-size: 14px; font-weight: 600; letter-spacing: 0; text-transform: none; }
-.project-info h3 { min-height: 2em; margin-top: 2px; font-size: clamp(34px, 3vw, 44px); font-weight: 700; letter-spacing: -.025em; line-height: 1; }
-.project-description { margin: 16px 0 0; color: var(--on-surface-variant); font-size: 15px; line-height: 23px; }
+.project-info h3 { margin: 2px 0 0; font-size: clamp(34px, 3vw, 44px); font-weight: 700; letter-spacing: -.025em; line-height: 1; }
+.project-description { margin: 8px 0 0; color: var(--on-surface-variant); font-size: 15px; line-height: 23px; }
 .project-footer { display: flex; min-height: 58px; align-items: center; justify-content: space-between; gap: 12px; margin-top: 20px; padding: 14px 8px; border-top: 2px solid var(--on-surface); border-bottom: 2px solid var(--on-surface); }
 .project-year { font-family: var(--font-mono); font-size: 12px; font-weight: 700; }
 .project-date { margin-bottom: 10px; }
