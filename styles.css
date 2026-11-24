@@ -321,7 +321,7 @@ body.oru-case-body { overflow-x: clip; }
 .oru-journey-scroll.is-fitted { height: var(--oru-journey-height); overflow: hidden; }
 .oru-journey-scroll.is-fitted .oru-journey-canvas { transform: scale(var(--oru-journey-scale)); transform-origin: top left; }
 .oru-journey-heading { display: flex; align-items: end; justify-content: space-between; gap: 28px; margin-bottom: 40px; }
-.oru-journey-heading h3 { max-width: 470px; margin: 0; color: #282431; font-family: var(--font-display); font-size: clamp(30px, 3vw, 42px); line-height: 1.05; }
+.oru-journey-heading h3 { width: fit-content; max-width: 100%; margin: 0; color: #282431; font-family: var(--font-display); font-size: clamp(30px, 3vw, 42px); line-height: 1.05; }
 .oru-journey-stages { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; padding-top: 22px; }
 .oru-journey-stages::before { position: absolute; top: 5px; right: calc(25% - 24px); left: 6px; height: 2px; background: #9277bc; content: ""; }
 .oru-journey-stage { position: relative; display: grid; grid-template-rows: auto 1fr 1fr; gap: 12px; min-width: 0; }
