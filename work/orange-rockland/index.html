@@ -28,7 +28,7 @@
       })();
     </script>
     <link rel="stylesheet" href="../../assets/vendor/lenis/lenis.css" />
-    <link rel="stylesheet" href="../../styles.css?v=20261124-header-alignment" />
+    <link rel="stylesheet" href="../../styles.css?v=20261124-tags-no-border" />
     <script src="../../assets/vendor/lenis/lenis.min.js" defer></script>
     <script src="../../script.js?v=20261124-journey-fit" defer></script>
   </head>
@@ -83,8 +83,8 @@
           </div>
           <p class="oru-hero-meta">Energy &amp; Utilities • Product Design • 2025 - 2026</p>
           <div class="oru-hero-intro-grid">
-            <p>O&amp;R CARE (Customer Analytics, Reporting and Engagement) is an initiative that includes a residential dashboard for exploring energy use and personalized recommendations.</p>
-            <p>I led discovery through handoff as Senior Product Designer, aligning O&amp;R product and program teams with technical partners. The MVP launched mid-2026.</p>
+            <p>O&amp;R CARE (Customer Analytics, Reporting and Engagement) aims to help residential customers understand their energy use, identify opportunities to save, and participate in energy efficiency and clean energy programs.</p>
+            <p>I led discovery through handoff as Senior Product Designer, aligning O&amp;R product and program teams with technical partners and designing with a pre-established enterprise design system. The MVP launched mid-2026.</p>
           </div>
         </header>
 
@@ -117,6 +117,11 @@
                 </div>
                 <p class="oru-section-summary">Within the O&amp;R CARE initiative, a customer dashboard helps residential customers explore their energy use, compare it with efficient homes, and find personalized energy-efficiency recommendations.</p>
               </div>
+              <section class="oru-project-context" aria-labelledby="oru-project-context-title">
+                <h2 id="oru-project-context-title">Project Context</h2>
+                <p>State regulatory requirements called for increased participation in clean energy and energy efficiency programs. O&amp;R needed to help more customers understand their options and take the next step toward enrollment.</p>
+                <p>Through discovery, we identified pain points across the customer journey, from understanding energy use and potential savings to finding trusted guidance and navigating programs. We designed the Clean Energy Dashboard from the ground up to bring those pieces together and give customers a clearer path forward.</p>
+              </section>
               <section class="oru-impact" aria-labelledby="oru-impact-title">
                 <h2 id="oru-impact-title">Impact</h2>
                 <p class="oru-impact-intro">Early engagement after launch</p>
@@ -196,7 +201,7 @@
                   </div>
                 </div>
                 <div class="oru-research-implication">
-                  <p>Design implication</p>
+                  <p>Design Implication</p>
                   <strong>Help customers understand their options and find support before committing to a project.</strong>
                 </div>
               </div>
@@ -222,20 +227,34 @@
               <div class="oru-design-features">
                 <div class="oru-design-feature">
                   <div class="oru-design-feature-copy">
-                    <h3>Start with the customer’s energy context</h3>
-                    <p>The dashboard brought energy usage and comparisons together with recommendations and resources. I designed the experience to give customers a starting point for exploring their home’s energy needs, rather than asking them to navigate a list of programs alone.</p>
+                    <h3>Help customers understand their usage and potential savings</h3>
+                    <p>The dashboard brought energy usage and comparisons together with recommendations and resources. Customers could compare their usage with energy-efficient neighbors in a defined area of their region, helping them understand potential savings and encouraging them to explore improvements and take action.</p>
                   </div>
                   <figure class="oru-overview-visual oru-overview-usage">
                   <img src="../../assets/oru-overview-usage.png?v=20261124-updated-2" width="4520" height="2904" alt="Dashboard chart showing household electricity costs over time alongside weather." />
+                  <figcaption>Customer Usage Chart</figcaption>
                   </figure>
                 </div>
                 <div class="oru-design-feature">
                   <div class="oru-design-feature-copy">
                     <h3>Offer a next step for different levels of readiness</h3>
-                    <p>Recommendation cards paired education about improvements with paths to programs and resources. Alongside those links, a virtual assessment and advisor support gave customers ways to learn more before committing to a larger project.</p>
+                    <p>The dashboard used energy usage, past program participation, and household information to show tailored recommendations for programs customers were eligible for. Recommendation cards paired education about improvements with paths to programs and resources, while a virtual assessment and advisor support helped customers learn more before committing to a larger project.</p>
+                  </div>
+                  <div class="oru-recommendation-flow" aria-label="Energy usage, past program participation, and household information inform personalized recommendations for eligible programs">
+                    <div class="oru-recommendation-inputs">
+                    <span class="oru-recommendation-flow-label">Customer Data</span>
+                    <ul class="oru-recommendation-sources">
+                      <li><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m13 2-8 12h6l-1 8 9-12h-6z" /></svg><span>Energy Usage</span></li>
+                      <li><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 5h16v14H4zM8 3v4m8-4v4M4 9h16m-12 5 2 2 5-5" /></svg><span>Past Program Participation</span></li>
+                      <li><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3" /><path d="M5 20a7 7 0 0 1 14 0" /></svg><span>Household Information</span></li>
+                    </ul>
+                    </div>
+                    <svg class="oru-recommendation-arrow" aria-hidden="true" viewBox="0 0 24 24"><path d="M3 12h18m-6-6 6 6-6 6" /></svg>
+                    <div class="oru-recommendation-result"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m12 3 1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3Zm6 12 .8 2.2L21 18l-2.2.8L18 21l-.8-2.2L15 18l2.2-.8L18 15Z" /></svg><div><span>Personalized recommendations</span><small>Eligible programs and next steps</small></div></div>
                   </div>
                   <figure class="oru-overview-visual oru-overview-recommendations">
                   <img src="../../assets/oru-overview-recommendations.png" width="4520" height="2904" alt="Heat pump recommendation with educational information, advisor support, and a link to participating contractors." />
+                  <figcaption>Personalized recommendations based on customer data.</figcaption>
                   </figure>
                 </div>
               </div>
