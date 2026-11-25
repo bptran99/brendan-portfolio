@@ -110,7 +110,7 @@ async function spotifyHandler(request) {
       pendingPayload = (async () => {
         const accessToken = await refreshAccessToken(clientId, clientSecret, refreshToken);
         const track = await getSpotifyTrack(accessToken);
-        return { track };
+        return { track, fetchedAt: new Date().toISOString() };
       })();
     }
 

@@ -76,7 +76,7 @@ Redeploy after adding or changing variables. Existing deployments do not receive
 
 - The client secret and refresh token are read only by server-side code and are never returned to the browser.
 - The local OAuth helper verifies a cryptographically random state value, exchanges the authorization code server-side, and prints the refresh token only in the local terminal.
-- The endpoint returns only the track title, artist names, album artwork URL, Spotify URL, and playback state.
+- The endpoint returns the track title, artist names, album artwork URL, Spotify URL, playback state, and the time the data was fetched from Spotify. The page displays that date and time in the visitor's local timezone.
 - The endpoint keeps a short in-memory cache and sends short shared-cache headers so visitors arriving close together do not create redundant Spotify requests.
 - Missing credentials, expired authorization, and Spotify outages return a safe empty state.
 

@@ -356,6 +356,7 @@ function showSpotifyEmpty(message) {
   spotifyListening.querySelector('[data-spotify-track]').hidden = true;
   spotifyListening.querySelector('[data-spotify-indicator]').hidden = true;
   spotifyListening.querySelector('[data-spotify-album]').hidden = true;
+  spotifyListening.querySelector('[data-spotify-fetched]').hidden = true;
 
   const emptyState = spotifyListening.querySelector('[data-spotify-empty]');
   emptyState.textContent = message;
@@ -363,7 +364,7 @@ function showSpotifyEmpty(message) {
   spotifyListening.setAttribute('aria-busy', 'false');
 }
 
-function showSpotifyTrack(track) {
+function showSpotifyTrack(track, fetchedAt) {
   if (!spotifyListening) return;
 
   const label = spotifyListening.querySelector('[data-spotify-label]');
@@ -392,6 +393,20 @@ function showSpotifyTrack(track) {
     album.hidden = true;
   }
 
+  const fetchedAtDate = new Date(fetchedAt);
+  if (fetchedAt && !Number.isNaN(fetchedAtDate.getTime())) {
+    const time = spotifyListening.querySelector('[data-spotify-time]');
+    time.dateTime = fetchedAtDate.toISOString();
+    time.textContent = new Intl.DateTimeFormat(undefined, {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+    }).format(fetchedAtDate);
+    spotifyListening.querySelector('[data-spotify-fetched]').hidden = false;
+  }
+
   spotifyListening.setAttribute('aria-busy', 'false');
 }
 
@@ -407,7 +422,7 @@ async function loadSpotifyOnce() {
 
     const payload = await response.json();
     if (payload.track) {
-      showSpotifyTrack(payload.track);
+      showSpotifyTrack(payload.track, payload.fetchedAt);
     } else {
       showSpotifyEmpty('Spotify listening activity is unavailable right now.');
     }

@@ -163,6 +163,7 @@ h2, h3 { margin: 0; font-family: var(--font-display); }
 .spotify-status-indicator span:nth-child(3) { animation-delay: -.2s; }
 .spotify-copy { margin: 0; font-size: 13px; line-height: 20px; }
 .spotify-copy > [data-spotify-label] { font-family: var(--font-mono); font-size: 11px; letter-spacing: .02em; text-transform: uppercase; }
+.spotify-fetched { display: block; margin-top: 4px; font-family: var(--font-mono); font-size: 12px; line-height: 18px; }
 .spotify-copy a { color: var(--hero-on-surface); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
 .spotify-copy a:hover { color: var(--hero-secondary); }
 .spotify-copy strong { font-weight: 600; }
