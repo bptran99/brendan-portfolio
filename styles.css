@@ -288,6 +288,9 @@ body.oru-case-body { overflow-x: clip; }
   .oru-hero-visual { margin-top: calc(clamp(-300px, -29svh, -180px) + var(--oru-header-height) - clamp(0px, (100svh - 700px) * .75, 140px)); }
 }
 .oru-case-layout { display: grid; grid-template-columns: minmax(250px, 310px) minmax(0, 1fr); gap: clamp(32px, 4vw, 64px); align-items: start; margin-top: clamp(64px, 8vw, 104px); }
+@media (min-width: 961px) {
+  .oru-case-body .header-identity { margin-left: 15px; }
+}
 .oru-case-sidebar { position: sticky; top: 112px; display: grid; gap: 10px; }
 .oru-case-nav { --oru-nav-motion-duration: 850ms; --oru-nav-motion-easing: cubic-bezier(.22, 1, .36, 1); --oru-nav-description-color: #626262; display: grid; gap: 8px; }
 :root[data-theme="dark"] .oru-case-nav { --oru-nav-description-color: #adafaf; }
@@ -345,7 +348,7 @@ body.oru-case-body { overflow-x: clip; }
 .oru-research-finding h4 { margin: 0; color: var(--on-surface); font-size: clamp(18px, 1.6vw, 22px); font-weight: 600; line-height: 1.18; letter-spacing: -.02em; }
 .oru-research-finding p { margin: 10px 0 0; color: var(--on-surface-variant); font-size: 15px; line-height: 1.5; }
 .oru-research-implication { display: grid; gap: 12px; margin-top: 12px; padding: clamp(20px, 2.5vw, 28px); border-radius: var(--radius-lg); background: #f4770b; color: #20130a; }
-.oru-research-implication strong { max-width: 660px; font-size: clamp(19px, 2vw, 25px); font-weight: 600; line-height: 1.25; letter-spacing: -.02em; }
+.oru-research-implication strong { width: fit-content; max-width: 100%; justify-self: start; font-size: clamp(19px, 2vw, 25px); font-weight: 600; line-height: 1.25; letter-spacing: -.02em; }
 .oru-section-content { display: grid; gap: 16px; max-width: 740px; margin-top: clamp(36px, 5vw, 64px); }
 .oru-section-content h3 { margin: 24px 0 0; color: var(--on-surface); font-family: var(--font-display); font-size: clamp(24px, 2.5vw, 32px); line-height: 1.15; }
 .oru-section-content h3:first-child { margin-top: 0; }
