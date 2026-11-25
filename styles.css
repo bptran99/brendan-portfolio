@@ -75,7 +75,14 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scrollbar-color: var(--outline) transparent; }
+@supports not (scrollbar-color: auto) {
+  html::-webkit-scrollbar-track { background: transparent; }
+  html::-webkit-scrollbar-thumb { background: var(--outline); border-radius: 999px; }
+}
+@media (forced-colors: active) {
+  html { scrollbar-color: auto; }
+}
 html.lenis { scroll-behavior: auto; }
 body {
   margin: 0;
@@ -270,18 +277,18 @@ h2, h3 { margin: 0; font-family: var(--font-display); }
 .case-study-placeholder > p:not(.eyebrow) { max-width: 620px; margin: 24px 0 0; color: var(--on-surface-variant); font-size: 17px; line-height: 1.65; }
 .case-study-placeholder .button { margin-top: 36px; }
 body.oru-case-body { overflow-x: clip; }
-.case-study-oru { --max-width: 1680px; --oru-header-height: 88px; --oru-hero-bg: radial-gradient(ellipse 76% 78% at 50% -28%, #ff902d 0%, #f4770b 35%, var(--surface) 100%); --oru-hero-foreground: #20130a; --oru-hero-muted: #3b2a1b; --oru-hero-frame: rgb(49 30 13 / 24%); margin-top: calc(-1 * var(--oru-header-height)); padding-top: 0; }
+.case-study-oru { --oru-header-height: 88px; --oru-content-block-gap: clamp(36px, 5vw, 64px); --oru-hero-bg: radial-gradient(ellipse 76% 78% at 50% -28%, #ff902d 0%, #f4770b 35%, var(--surface) 100%); --oru-hero-foreground: #20130a; --oru-hero-muted: #3b2a1b; --oru-hero-frame: rgb(49 30 13 / 24%); margin-top: calc(-1 * var(--oru-header-height)); padding-top: 0; }
 .case-study-page.case-study-oru { padding-bottom: clamp(24px, 4vw, 48px); }
 :root[data-theme="dark"] .case-study-oru { --oru-hero-bg: radial-gradient(ellipse 76% 78% at 50% -28%, #a94e0b 0%, #502508 42%, var(--surface) 100%); --oru-hero-foreground: #fff8f1; --oru-hero-muted: #e9d7c6; --oru-hero-frame: rgb(255 255 255 / 18%); }
 .oru-hero-stage { position: relative; isolation: isolate; width: 100%; background: var(--oru-hero-bg); }
-.oru-case-header { position: sticky; z-index: 0; top: var(--oru-header-height); display: grid; grid-template-rows: auto auto 1fr; width: 100%; height: calc(100svh - var(--oru-header-height)); min-height: 520px; max-width: none; padding: clamp(40px, 7vh, 72px) var(--margin) clamp(64px, 18vh, 148px); color: var(--oru-hero-foreground); text-align: center; }
-.oru-hero-heading { width: min(100%, 1120px); margin-inline: auto; }
+.oru-case-header { position: sticky; z-index: 0; top: var(--oru-header-height); display: grid; grid-template-rows: auto auto 1fr; width: min(100%, var(--max-width)); height: calc(100svh - var(--oru-header-height)); min-height: 520px; max-width: none; margin-inline: auto; padding: clamp(40px, 7vh, 72px) var(--margin) clamp(64px, 18vh, 148px); color: var(--oru-hero-foreground); text-align: center; }
+.oru-hero-heading { width: 100%; }
 .oru-hero-heading, .oru-hero-meta, .oru-hero-intro-grid p { opacity: var(--oru-hero-text-opacity, 1); }
 .oru-hero-heading, .oru-hero-meta, .oru-hero-intro-grid { transform: scale(var(--oru-hero-scale, 1)); }
 .oru-case-header .oru-hero-heading > .eyebrow { margin: 0; color: var(--oru-hero-muted); }
-.oru-case-header h1 { max-width: 1120px; margin: 12px auto 0; color: inherit; font-size: clamp(52px, 6.4vw, 108px); letter-spacing: -.045em; line-height: .9; text-transform: none; }
-.oru-hero-meta { margin: 20px auto 0; color: var(--oru-hero-muted); font-size: 14px; line-height: 1.5; }
-.oru-hero-intro-grid { display: grid; width: min(100%, 880px); grid-template-columns: repeat(2, minmax(0, 1fr)); align-self: start; gap: clamp(32px, 10vw, 180px); margin: 64px auto 0; text-align: left; }
+.oru-case-header h1 { max-width: none; margin: 12px 0 0; color: inherit; font-size: clamp(52px, 6.4vw, 108px); letter-spacing: -.045em; line-height: .9; text-transform: none; }
+.oru-hero-meta { margin: 20px 0 0; color: var(--oru-hero-muted); font-size: 14px; line-height: 1.5; }
+.oru-hero-intro-grid { display: grid; width: 100%; grid-template-columns: repeat(2, minmax(0, 1fr)); align-self: start; gap: clamp(32px, 10vw, 180px); margin: 64px 0 0; text-align: left; }
 .oru-hero-intro-grid p { margin: 0; color: var(--oru-hero-muted); font-size: clamp(16px, 1.25vw, 18px); line-height: 1.55; }
 .oru-hero-visual { position: relative; z-index: 2; width: min(calc(100% - var(--margin) * 2), 1344px); margin: calc(clamp(-300px, -29svh, -180px) + var(--oru-header-height)) auto 0; }
 .oru-hero-visual img { display: block; width: 100%; height: auto; border: 2px solid var(--oru-hero-frame); border-radius: var(--radius-xl); transform: scale(var(--oru-visual-scale, 1)); }
@@ -289,6 +296,9 @@ body.oru-case-body { overflow-x: clip; }
   .oru-hero-visual { margin-top: calc(clamp(-300px, -29svh, -180px) + var(--oru-header-height) - clamp(0px, (100svh - 700px) * .75, 140px)); }
 }
 .oru-case-layout { display: grid; grid-template-columns: minmax(250px, 310px) minmax(0, 1fr); gap: clamp(32px, 4vw, 64px); align-items: start; margin-top: clamp(64px, 8vw, 104px); }
+@media (min-width: 961px) {
+  .oru-case-body .header-identity { margin-left: 15px; }
+}
 .oru-case-sidebar { position: sticky; top: 112px; display: grid; gap: 10px; }
 .oru-case-nav { --oru-nav-motion-duration: 850ms; --oru-nav-motion-easing: cubic-bezier(.22, 1, .36, 1); --oru-nav-description-color: #626262; display: grid; gap: 8px; }
 :root[data-theme="dark"] .oru-case-nav { --oru-nav-description-color: #adafaf; }
@@ -302,20 +312,20 @@ body.oru-case-body { overflow-x: clip; }
 .oru-case-nav a[aria-current="location"] .oru-nav-detail { grid-template-rows: 1fr; opacity: 1; visibility: visible; transition-delay: 0s; }
 .oru-nav-title { font-size: clamp(25px, 2vw, 32px); font-weight: 600; letter-spacing: -.025em; line-height: 1.08; }
 .oru-nav-description { color: var(--oru-nav-description-color); font-size: 16px; font-weight: 400; line-height: 1.5; }
-.oru-case-content { display: grid; min-width: 0; grid-template-columns: minmax(0, 1fr); gap: clamp(24px, 3vw, 40px); }
+.oru-case-content { display: grid; min-width: 0; grid-template-columns: minmax(0, 1fr); gap: clamp(48px, 6vw, 80px); }
 .oru-visual-section { min-width: 0; scroll-margin-top: 112px; }
 .oru-section-label { margin: 0 0 16px; color: var(--on-surface); font-family: var(--font-body); font-size: 18px; font-weight: 600; line-height: 1.3; }
 .oru-section-panel { min-width: 0; padding: clamp(24px, 3vw, 48px); border-radius: var(--radius-lg); background: var(--surface-high); }
 .oru-mobile-section-intro { display: none; }
-.oru-section-heading { max-width: 720px; }
+.oru-section-heading { max-width: none; }
 .oru-section-heading h2 { margin-top: 12px; font-size: clamp(38px, 5.4vw, 72px); font-weight: 700; letter-spacing: -.035em; line-height: .96; }
 .oru-visual-placeholder { margin: 0; }
 .oru-visual-placeholder-art { display: grid; min-height: 240px; aspect-ratio: 16 / 9; place-items: center; border: 2px dashed var(--outline); border-radius: var(--radius-xl); background: var(--surface-container-low); color: var(--on-surface-variant); }
 .oru-visual-placeholder-art span { padding: 10px 16px; border: 1px solid var(--outline-variant); border-radius: var(--radius); background: var(--surface); font-family: var(--font-mono); font-size: 13px; text-align: center; }
 .oru-visual-placeholder figcaption { margin-top: 12px; color: var(--on-surface-variant); font-size: 13px; line-height: 1.5; }
 .oru-overview-visuals { display: grid; grid-template-columns: 1fr; gap: clamp(24px, 4vw, 48px); margin-top: 0; }
-.oru-overview-visual { display: grid; min-width: 0; gap: clamp(24px, 3vw, 36px); margin: 0; }
-.oru-overview-visual figcaption { color: var(--on-surface); font-size: 13px; font-weight: 600; line-height: 1.4; }
+.oru-overview-visual { display: grid; min-width: 0; gap: 12px; margin: 0; }
+.oru-overview-visual figcaption { color: var(--on-surface-variant); font-size: 13px; line-height: 1.5; }
 .oru-overview-visual img { display: block; width: 100%; height: auto; border: 1px solid #d4d4d4; border-radius: 1.5% / 2.34%; box-shadow: 0 18px 42px rgb(0 0 0 / 24%); }
 .oru-journey { margin: 0; }
 .oru-journey-scroll { overflow-x: auto; border: 1px solid var(--outline-variant); border-radius: var(--radius-xl); }
@@ -323,7 +333,7 @@ body.oru-case-body { overflow-x: clip; }
 .oru-journey-scroll.is-fitted { height: var(--oru-journey-height); overflow: hidden; }
 .oru-journey-scroll.is-fitted .oru-journey-canvas { transform: scale(var(--oru-journey-scale)); transform-origin: top left; }
 .oru-journey-heading { display: flex; align-items: end; justify-content: space-between; gap: 28px; margin-bottom: 40px; }
-.oru-journey-heading h3 { max-width: 470px; margin: 0; color: #282431; font-family: var(--font-display); font-size: clamp(30px, 3vw, 42px); line-height: 1.05; }
+.oru-journey-heading h3 { width: 100%; margin: 0; color: #282431; font-family: var(--font-display); font-size: clamp(30px, 3vw, 42px); line-height: 1.05; }
 .oru-journey-stages { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; padding-top: 22px; }
 .oru-journey-stages::before { position: absolute; top: 5px; right: calc(25% - 24px); left: 6px; height: 2px; background: #9277bc; content: ""; }
 .oru-journey-stage { position: relative; display: grid; grid-template-rows: auto 1fr 1fr; gap: 12px; min-width: 0; }
@@ -336,7 +346,7 @@ body.oru-case-body { overflow-x: clip; }
 .oru-journey-stage:not(:last-child) .oru-journey-future::after { color: #6eac7c; }
 .oru-journey figcaption { margin-top: 12px; color: var(--on-surface-variant); font-size: 13px; line-height: 1.5; }
 .oru-research-board { padding: 0; border-radius: var(--radius-xl); background: var(--surface-container-low); }
-.oru-research-kicker, .oru-research-implication p { margin: 0; font-family: var(--font-mono); font-size: 12px; letter-spacing: .04em; text-transform: uppercase; }
+.oru-research-kicker, .oru-research-implication p { margin: 0; font-family: var(--font-body); font-size: 13px; font-weight: 600; }
 .oru-research-kicker { color: var(--on-surface-variant); }
 .oru-research-board > h3 { margin: 12px 0 28px; color: var(--on-surface); font-family: var(--font-display); font-size: clamp(32px, 3.5vw, 46px); line-height: 1; }
 .oru-research-findings { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
@@ -346,18 +356,35 @@ body.oru-case-body { overflow-x: clip; }
 .oru-research-finding h4 { margin: 0; color: var(--on-surface); font-size: clamp(18px, 1.6vw, 22px); font-weight: 600; line-height: 1.18; letter-spacing: -.02em; }
 .oru-research-finding p { margin: 10px 0 0; color: var(--on-surface-variant); font-size: 15px; line-height: 1.5; }
 .oru-research-implication { display: grid; gap: 12px; margin-top: 12px; padding: clamp(20px, 2.5vw, 28px); border-radius: var(--radius-lg); background: #f4770b; color: #20130a; }
-.oru-research-implication strong { max-width: 660px; font-size: clamp(19px, 2vw, 25px); font-weight: 600; line-height: 1.25; letter-spacing: -.02em; }
-.oru-section-content { display: grid; gap: 16px; max-width: 740px; margin-top: clamp(36px, 5vw, 64px); }
+.oru-research-implication strong { width: 100%; font-size: clamp(19px, 2vw, 25px); font-weight: 600; line-height: 1.25; letter-spacing: -.02em; }
+.oru-section-content { display: grid; gap: 16px; margin-top: var(--oru-content-block-gap); }
 .oru-section-content h3 { margin: 24px 0 0; color: var(--on-surface); font-family: var(--font-display); font-size: clamp(24px, 2.5vw, 32px); line-height: 1.15; }
 .oru-section-content h3:first-child { margin-top: 0; }
 .oru-section-content p { margin: 0; color: var(--on-surface-variant); font-size: 16px; line-height: 1.6; }
-.oru-design-features { display: grid; gap: clamp(40px, 5vw, 64px); }
-.oru-design-feature { display: grid; gap: 24px; min-width: 0; }
-.oru-design-feature-copy { display: grid; gap: 16px; max-width: 740px; }
+.oru-design-features { display: grid; gap: var(--oru-content-block-gap); }
+.oru-design-feature { display: grid; gap: 48px; min-width: 0; }
+.oru-design-feature-copy { display: grid; gap: 16px; }
 .oru-design-feature-copy h3 { margin: 0; color: var(--on-surface); font-family: var(--font-display); font-size: clamp(24px, 2.5vw, 32px); line-height: 1.15; }
 .oru-design-feature-copy p { margin: 0; color: var(--on-surface-variant); font-size: 16px; line-height: 1.6; }
-.oru-impact { margin-top: 0; }
-.oru-impact h2 { margin: 0; color: var(--on-surface); font-family: var(--font-display); font-size: clamp(32px, 3vw, 48px); line-height: 1; }
+.oru-recommendation-flow { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: clamp(16px, 3vw, 32px); }
+.oru-recommendation-inputs { display: grid; gap: 12px; min-width: 0; }
+.oru-recommendation-flow-label { color: var(--on-surface-variant); font-family: var(--font-body); font-size: 13px; font-weight: 600; }
+.oru-recommendation-sources { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.oru-recommendation-sources li { display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 14px 16px; border-radius: var(--radius-lg); background: var(--surface-low); color: var(--on-surface); font-size: 14px; font-weight: 600; line-height: 1.35; }
+.oru-recommendation-sources svg { flex: none; color: #ad4900; }
+:root[data-theme="dark"] .oru-recommendation-sources svg { color: #ff902d; }
+.oru-recommendation-arrow { width: 24px; color: #f4770b; }
+.oru-recommendation-result { display: flex; align-items: center; gap: 14px; min-width: 0; padding: 20px; border-radius: var(--radius-lg); background: #f4770b; color: #20130a; font-weight: 600; }
+.oru-recommendation-result svg { flex: none; }
+.oru-recommendation-result div { display: grid; gap: 4px; }
+.oru-recommendation-result small { font-size: 13px; font-weight: 400; line-height: 1.4; }
+@media (max-width: 600px) {
+  .oru-recommendation-flow { grid-template-columns: 1fr; gap: 16px; }
+  .oru-recommendation-arrow { justify-self: center; transform: rotate(90deg); }
+}
+.oru-impact { margin-top: var(--oru-content-block-gap); }
+.oru-project-context h2, .oru-impact h2 { margin: 0; color: var(--on-surface); font-family: var(--font-display); font-size: clamp(32px, 3vw, 48px); line-height: 1; }
+.oru-project-context p { margin: 16px 0 0; color: var(--on-surface-variant); font-size: 16px; line-height: 1.6; }
 .oru-impact-intro { margin: 12px 0 0; color: var(--on-surface-variant); font-size: 16px; }
 .oru-impact-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(24px, 4vw, 48px); margin: 32px 0 0; }
 .oru-impact-stat { display: flex; min-width: 0; flex-direction: column; gap: 8px; }
@@ -475,7 +502,7 @@ body.oru-case-body { overflow-x: clip; }
 }
 
 @media (max-width: 1080px) {
-  .oru-design-features { margin-top: 32px; }
+  .oru-design-features { margin-top: 16px; }
   .oru-overview-visuals { margin-top: 32px; }
   .oru-case-layout { grid-template-columns: 1fr; gap: 0; }
   .oru-case-sidebar { display: none; }
@@ -485,16 +512,16 @@ body.oru-case-body { overflow-x: clip; }
   .oru-section-heading h2 { margin: 16px 0 0; font-family: var(--font-body); font-size: clamp(25px, 3vw, 32px); font-weight: 600; letter-spacing: -.025em; line-height: 1.08; }
   .oru-section-summary { margin: 16px 0 0; color: var(--on-surface-variant); font-size: 16px; line-height: 1.5; }
   .oru-visual-placeholder { margin-top: 32px; }
-  .oru-impact { margin-top: 32px; }
-  .oru-research-board { margin-top: 32px; }
-  .oru-journey { margin-top: 32px; }
+  .oru-project-context { margin-top: 16px; }
+  .oru-research-board { margin-top: 16px; }
+  .oru-journey { margin-top: 16px; }
 }
 
 @media (max-width: 640px) {
   .case-study-oru { padding-top: 0; }
   .oru-case-header { height: auto; min-height: 0; grid-template-rows: auto auto auto; padding-block: clamp(44px, 8vh, 72px); }
   .oru-case-header h1 { font-size: clamp(42px, 12vw, 68px); }
-  .oru-hero-meta { max-width: 330px; font-size: 13px; }
+  .oru-hero-meta { font-size: 13px; }
   .oru-hero-intro-grid { grid-template-columns: 1fr; align-self: start; gap: 14px; margin-top: 64px; margin-bottom: 0; }
   .oru-hero-visual { width: calc(100% - var(--margin) * 2); margin-top: var(--oru-header-height); }
   .oru-hero-visual img { border-radius: var(--radius-lg); }
